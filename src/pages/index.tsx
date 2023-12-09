@@ -11,7 +11,7 @@ export default function Home(props:any) {
     <>
       <div>
         <GlobalLayout props={props}>
-          <Layout />
+          <Layout props={props}/>
         </GlobalLayout>
       </div>
     </>
