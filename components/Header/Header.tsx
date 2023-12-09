@@ -104,6 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
   const handleModalSubmit = async () => {
     console.log("URL:", url);
+    console.log("media URL:", mediaUrl);
     console.log("Heading:", heading);
     console.log("Text:", text);
 
@@ -441,6 +442,31 @@ export const Header: React.FC<HeaderProps> = ({
               maxLength={60}
               onChange={(e: any) => setHeading(e.target.value)}
               placeholder="Enter Heading of Post"
+              type="text"
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
+            />
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Website
+            </Typography>
+            <InputField
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              value={url}
+              maxLength={60}
+              onChange={(e: any) => setUrl(e.target.value)}
+              placeholder="Enter Website Url"
               type="text"
               style={{
                 marginTop: "12px",
