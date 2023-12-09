@@ -161,6 +161,8 @@ export const Header: React.FC<HeaderProps> = ({
         const tx = await getBalance(address);
         console.log(tx);
         setPayCoinValue(tx);
+        console.log(tx);
+        
       } catch (error) {}
     };
     getBalanceinHeader();

@@ -24,7 +24,7 @@ interface BlogProps {
   blogData: any;
   isSlug: boolean;
   props: any;
-  address:any
+  address: any;
 }
 const githubUserIds = [
   23977234, 31523966, 3518527, 27022981, 68613247, 89782151, 72006591, 46043928,
@@ -52,9 +52,9 @@ const Blog: React.FC<BlogProps> = ({
   address,
   props,
 }) => {
-
-  console.log('assa',)
   const router = useRouter();
+  console.log(props);
+
   const [likes, setLikes] = useState(0);
   const [randomImage, setRandomImage] = useState<string>("");
   const [hovered, setHovered] = useState<boolean>(false);
@@ -68,19 +68,19 @@ const Blog: React.FC<BlogProps> = ({
 
   const handleClick = async (id: any) => {
     try {
-      console.log("props inside blog")
-      console.log(props)
+      console.log("props inside blog");
+      console.log(props);
       const node: LightNode = props.node;
-      console.log("node got")
+      console.log("node got");
       const liveliness = Liveliness.create({ id: id });
-      console.log("liveliness created")
+      console.log("liveliness created");
       const serialisedMessage = Liveliness.encode(liveliness).finish();
-      console.log("liveliness encoded")
+      console.log("liveliness encoded");
       // Send the message using Light Push
       await node.lightPush.send(encoder, {
         payload: serialisedMessage,
       });
-      console.log(">>>> message sent")
+      console.log(">>>> message sent");
     } catch (error) {
       console.log(error);
     }
@@ -88,10 +88,17 @@ const Blog: React.FC<BlogProps> = ({
   };
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    setLikes(likes + 1);
+    console.log("id", id);
+  
+    if (props.liveliness.has(id)) {
+      const likesValue = props.liveliness.get(id);
+      console.log("get", likesValue);
+      setLikes(likesValue);
+    } else {
+      console.log(`ID ${id} not found in the liveliness Map.`);
+    }
   };
-
-  const random = faker.image.avatar();
+  
 
   return (
     <div
@@ -112,7 +119,14 @@ const Blog: React.FC<BlogProps> = ({
         />
 
         <div className={styles.contentContainer}>
-          <div style={{display:'flex',flexDirection:'row',gap:'8px',alignItems:'center'}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: "8px",
+              alignItems: "center",
+            }}
+          >
             {isSlug && (
               <a
                 target="_blank"
@@ -145,10 +159,7 @@ const Blog: React.FC<BlogProps> = ({
               color={colorPalette.popWhite[500]}
               style={{ fontSize: "12px" }}
             >
-            {`(By : ${address.slice(
-              0,
-              4
-            )}...${address.slice(-4)})`}
+              {`(By : ${address.slice(0, 4)}...${address.slice(-4)})`}
             </Typography>
           </div>
 
