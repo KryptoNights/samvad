@@ -4,8 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@cred/neopop-web/lib/components";
 import { InputField } from "@cred/neopop-web/lib/components";
 import styles from './comment.module.css'
-import { Avatar } from "@mui/material";
-
+import { Avatar } from "@mui/material";import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
+import { showInfoToast } from "@/utils/notifications";
 
 export default function Comment({
   reply,
@@ -35,10 +35,11 @@ export default function Comment({
 
   const [replyText, setReplyText] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
+  const [NotificationData, setNotificationData] = useState("");
+  const [userAlice, setUserAlice] = useState<PushAPI | null>(null);
 
   const inputEl: any = useRef(null);
   console.log("this is reply", reply);
-
 
   const onSubmit = async () => {
     try {
@@ -50,11 +51,83 @@ export default function Comment({
         "10000000000000000",
         signer!
       );
+      sendNotification();
     } catch (error) {
       console.log("failed");
       console.log(error);
-
     }
+  };
+
+  useEffect(() => {
+    const initializePushAPI = async () => {
+      try {
+        const user = await PushAPI.initialize(signer, {
+          env: "staging",
+        });
+        setUserAlice(user);
+        const stream: any = await userAlice?.initStream(
+          [CONSTANTS.STREAM.NOTIF],
+          {
+            filter: {
+              channels: ["*"], // pass in specific channels to only listen to those
+              chats: ["*"], // pass in specific chat ids to only listen to those
+            },
+            connection: {
+              retries: 3, // number of retries in case of error
+            },
+            raw: false, // enable true to show all data
+          }
+        );
+
+        stream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+          console.log(data.message.notification.body);
+          setNotificationData(data.message.notification.body);
+          showInfoToast(data.message.notification.body);
+        });
+
+        stream.connect();
+
+        console.log("user alice", userAlice);
+      } catch (error) {
+        console.error("Error initializing PushAPI:", error);
+      }
+    };
+    initializePushAPI();
+  }, [postId]);
+
+  // const apiResponse = async () => {
+  //   const stream: any = await userAlice?.initStream([CONSTANTS.STREAM.NOTIF], {
+  //     filter: {
+  //       channels: ["*"], // pass in specific channels to only listen to those
+  //       chats: ["*"], // pass in specific chat ids to only listen to those
+  //     },
+  //     connection: {
+  //       retries: 3, // number of retries in case of error
+  //     },
+  //     raw: false, // enable true to show all data
+  //   });
+
+  //   stream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+  //     console.log(data.message.notification.body);
+
+  //     // setNotificationData(data.message.notification.body);
+  //     // showInfoToast(data.message.notification.body);
+  //     // console.log("noti",NotificationData);
+  //     // console.log("data",data);
+  //   });
+
+  //   stream.connect();
+
+  //   console.log("user alice", userAlice);
+  // };
+  const sendNotification = async () => {
+    await userAlice?.channel.send(["*"], {
+      notification: {
+        title: "New Notification for you",
+        body: "Someone replied to your message",
+      },
+    });
+    showInfoToast(NotificationData);
   };
 
   return (
@@ -100,11 +173,16 @@ export default function Comment({
             ref={inputEl}
             className="border border-gray-300 rounded p-2"
             inputMode="text"
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               setReplyText(e.target.value);
             }}
             type="text"
-            style={{ marginTop: "12px", marginBottom: "20px", paddingBottom: '6px', borderBottom: '2px solid #8A8A8A' }}
+            style={{
+              marginTop: "12px",
+              marginBottom: "20px",
+              paddingBottom: "6px",
+              borderBottom: "2px solid #8A8A8A",
+            }}
           />
           <div className="flex mt-2">
             <Button

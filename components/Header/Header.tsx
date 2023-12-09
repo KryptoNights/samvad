@@ -14,7 +14,6 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 import { CircularProgress } from "@mui/material";
 import { create } from "ipfs-http-client";
 import * as fs from "fs";
-import { showWarningToast } from "@/utils/notifications";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
@@ -80,7 +79,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
         console.log(url);
-
         // Perform actions with the CID or the uploaded file
       };
       reader.readAsArrayBuffer(file);
@@ -154,7 +152,6 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-
   React.useEffect(() => {
     const getBalanceinHeader = async () => {
       try {
@@ -166,7 +163,6 @@ export const Header: React.FC<HeaderProps> = ({
     };
     getBalanceinHeader();
   }, []);
-
 
   const router = useRouter();
   function redirectToHome() {
@@ -184,7 +180,6 @@ export const Header: React.FC<HeaderProps> = ({
         >
           SAMVAD
         </Typography>
-
         <div style={{ display: "flex" }}>
           <Button
             colorMode="light"
@@ -193,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
             style={{ marginRight: "12px" }}
             onClick={() => {
               handlewithDrawCoinOpenModal();
-              getBalanceinHeader();
+              // getBalanceinHeader();
             }}
           >
             Withdraw Coin
@@ -246,7 +241,10 @@ export const Header: React.FC<HeaderProps> = ({
             </>
           )}
         </div>
-        <Modal open={withdrawCoinOpenModal} onClose={handlewithDrawCoinCloseModal}>
+        <Modal
+          open={withdrawCoinOpenModal}
+          onClose={handlewithDrawCoinCloseModal}
+        >
           <Box
             sx={{
               width: "600px",
@@ -278,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
               inputMode="text"
               maxLength={30}
               onChange={(e: any) => {
-                const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
+                const onlyNumbers = e.target.value.replace(/[^0-9]^[.]/g, "");
                 setAmount(onlyNumbers);
                 console.log(onlyNumbers);
               }}
@@ -348,7 +346,7 @@ export const Header: React.FC<HeaderProps> = ({
               inputMode="text"
               maxLength={30}
               onChange={(e: any) => {
-              setAmount(e.target.value)
+                setAmount(e.target.value);
               }}
               placeholder="enter amount to deposit"
               type="number"
@@ -408,7 +406,6 @@ export const Header: React.FC<HeaderProps> = ({
               Upload Image
             </Typography>
             <InputField
-        
               colorConfig={{
                 labelColor: "#0d0d0d",
                 textColor: "#000000",
@@ -441,7 +438,7 @@ export const Header: React.FC<HeaderProps> = ({
               colorMode="light"
               value={heading}
               maxLength={60}
-              onChange={(e:any) => setHeading(e.target.value)}
+              onChange={(e: any) => setHeading(e.target.value)}
               placeholder="Enter Heading of Post"
               type="text"
               style={{

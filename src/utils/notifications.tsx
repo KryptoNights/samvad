@@ -48,3 +48,16 @@ export const showWarningToast = (message: any) => {
     }
   });
 };
+
+export const showInfoToast = (message: any) => {
+  toast.info(message, {
+    position: "bottom-right",
+    autoClose: false,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+  });
+};
