@@ -14,6 +14,7 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 import { CircularProgress } from "@mui/material";
 import { create } from "ipfs-http-client";
 import * as fs from "fs";
+import { showWarningToast } from "@/utils/notifications";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
@@ -161,7 +162,6 @@ export const Header: React.FC<HeaderProps> = ({
           SAMVAD
         </Typography>
 
-
         <div style={{ display: "flex" }}>
           <Button
             colorMode="light"
@@ -173,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
               getBalanceinHeader();
             }}
           >
-            Add Coin : {Number(paycoinValue).toFixed(2)}
+            Add Coin : {Number(paycoinValue/1e18).toFixed(2)}
           </Button>
           <Button
             colorMode="light"

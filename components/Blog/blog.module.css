@@ -28,6 +28,8 @@ text-align: left;
 .container:hover {
   background-color: #444444;
   border: 1px solid #EFEFEF;
+  scale: 1.01;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .subContainer {

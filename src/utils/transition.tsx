@@ -18,7 +18,7 @@ export async function testProvider(
   Promise.resolve();
 }
 
-const sepoliaProvider = new ethers.JsonRpcProvider("https://1rpc.io/sepolia");
+const sepoliaProvider = new ethers.providers.JsonRpcProvider("https://1rpc.io/sepolia");
 // const sepoliaProvider = new ethers.JsonRpcProvider("https://rpc.sepolia.org");
 // provider: ethers.Provider | ethers.Signer
 
