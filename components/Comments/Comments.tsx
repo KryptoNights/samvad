@@ -68,8 +68,8 @@ export default function Comments({
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-8">
-      <div className="comment-input-box">
+    <div className={styles.container}>
+      <div style={{width:'100%'}}>
         <br />
         <Typography
           {...FontVariant.HeadingSemiBold22}
@@ -85,13 +85,11 @@ export default function Comments({
             textColor: "#FFFFFF",
           }}
           colorMode="light"
-          id="text_field"
-          className="border border-gray-300 rounded p-2"
           value={commentInput}
           inputMode="text"
-          placeholder="Reply to "
+          placeholder="Reply to Post"
           onChange={(e: any) => {
-            debounce(setCommentInput(e.target.value));
+            setCommentInput(e.target.value);
           }}
           type="text"
           textStyle={styles.label}
@@ -110,7 +108,7 @@ export default function Comments({
           Submit
         </Button>
       </div>
-      <div style={{ color: 'white' }}>
+      <div style={{ color: 'white',width:'100%' }}>
         {replies?.map((reply: any) => (
           <Comment key={reply.id} reply={reply} postId={postId} />
         ))}
