@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ethers,Provider } from "ethers";
+import { ethers } from "ethers";
+import {Provider} from "@ethersproject/providers";
 
 type ProviderType = Provider;
 type SignerType = ethers.Signer | null;

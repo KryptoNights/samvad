@@ -14,8 +14,8 @@ flex-direction: column;
 text-align: left;
 }
 .container {
-  background-color: #3D3D3D;
-  border-radius: 30px;
+  background-color: #202020;
+  border-radius: 0px;
   max-width: 1600px;
   margin: auto;
   margin-top: 12px;
@@ -26,7 +26,7 @@ text-align: left;
 }
 
 .container:hover {
-  background-color: #5f5b5b;
+  background-color: #444444;
   border: 1px solid #EFEFEF;
 }
 
