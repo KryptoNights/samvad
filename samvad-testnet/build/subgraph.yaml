@@ -1,0 +1,31 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Samvad
+    network: sepolia
+    source:
+      address: "0x0c3C77F1302F98f15D0151866f810cFF2955EECA"
+      abi: Samvad
+      startBlock: 4854218
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - PostCreated
+        - ReplyCreated
+        - TokensTransferred
+      abis:
+        - name: Samvad
+          file: Samvad/abis/Samvad.json
+      eventHandlers:
+        - event: PostCreated(address,uint256,string,string,string,string)
+          handler: handlePostCreated
+        - event: ReplyCreated(address,uint256,string,uint256,uint256,bool)
+          handler: handleReplyCreated
+        - event: TokensTransferred(indexed bytes32,indexed
+            uint64,address,address,uint256,address,uint256)
+          handler: handleTokensTransferred
+      file: Samvad/Samvad.wasm

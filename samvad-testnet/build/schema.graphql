@@ -1,0 +1,39 @@
+type PostCreated @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  Samvad_id: BigInt! # uint256
+  mediaUrl: String! # string
+  url: String! # string
+  text: String! # string
+  heading: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ReplyCreated @entity(immutable: true) {
+  id: Bytes!
+  account: Bytes! # address
+  Samvad_id: BigInt! # uint256
+  text: String! # string
+  post: BigInt! # uint256
+  parent: BigInt! # uint256
+  top_level: Boolean! # bool
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TokensTransferred @entity(immutable: true) {
+  id: Bytes!
+  messageId: Bytes! # bytes32
+  destinationChainSelector: BigInt! # uint64
+  receiver: Bytes! # address
+  token: Bytes! # address
+  tokenAmount: BigInt! # uint256
+  feeToken: Bytes! # address
+  fees: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
