@@ -126,6 +126,7 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
         </>
       ) : (
         <>
+        {console.log('blogData',blogData)}
           {blogData.map((blog: any) => (
             <Blog
               key={blog.id}

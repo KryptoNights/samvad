@@ -169,6 +169,7 @@ const useTransactions = () => {
       posts.push({
         ..._posts.postCreateds[i],
         id: _posts.postCreateds[i].Samvad_id,
+        address: _posts.postCreateds[i].account,
       })
     }
     return posts;
