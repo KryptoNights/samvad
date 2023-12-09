@@ -89,6 +89,7 @@ export default function Comments({
           className="border border-gray-300 rounded p-2"
           value={commentInput}
           inputMode="text"
+          placeholder="Reply to "
           onChange={(e: any) => {
             debounce(setCommentInput(e.target.value));
           }}

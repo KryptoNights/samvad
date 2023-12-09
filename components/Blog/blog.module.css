@@ -12,6 +12,7 @@ padding-left: 16px;
 display: flex;
 flex-direction: column;
 text-align: left;
+margin-top: 8px;
 }
 .container {
   background-color: #202020;
@@ -28,7 +29,6 @@ text-align: left;
 .container:hover {
   background-color: #444444;
   border: 1px solid #EFEFEF;
-  scale: 1.01;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -45,6 +45,8 @@ text-align: left;
 
 .externalLink{
   color: #a6d1f4;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 .externalLink:hover{
   color: #7abcf1;

@@ -10,8 +10,9 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 
 import { createEncoder, createDecoder } from "@waku/sdk";
 import protobuf from "protobufjs";
-const Liveliness = new protobuf.Type("Liveliness")
-    .add(new protobuf.Field("id", 1, "uint64"));
+const Liveliness = new protobuf.Type("Liveliness").add(
+  new protobuf.Field("id", 1, "uint64")
+);
 
 interface BlogProps {
   id: number;
@@ -22,28 +23,19 @@ interface BlogProps {
   text: string;
   blogData: any;
   isSlug: boolean;
-  props:any
+  props: any;
 }
 const githubUserIds = [
-  23977234,
-  31523966,
-  3518527,
-  27022981,
-  68613247,
-  89782151,
-  72006591,
-  46043928,
-  46043428,
-  68611224,
-  89734451
+  23977234, 31523966, 3518527, 27022981, 68613247, 89782151, 72006591, 46043928,
+  46043428, 68611224, 89734451,
 ];
 
 // Choose a content topic
 const contentTopic = `/samvad/0/posts/proto`;
 // Create a message encoder and decoder
 const encoder = createEncoder({
-    contentTopic: contentTopic, // message content topic
-    ephemeral: false, // allows messages be stored on the network
+  contentTopic: contentTopic, // message content topic
+  ephemeral: false, // allows messages be stored on the network
 });
 const decoder = createDecoder(contentTopic);
 
@@ -64,23 +56,24 @@ const Blog: React.FC<BlogProps> = ({
   const [hovered, setHovered] = useState<boolean>(false);
 
   useEffect(() => {
-    const randomUserId = githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
+    const randomUserId =
+      githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
     const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
     setRandomImage(avatarUrl);
   }, []);
 
   const handleClick = async (id: any) => {
     const node = props.node;
-    console.log("node got")
+    console.log("node got");
     const liveliness = Liveliness.create({ id: id });
-    console.log("liveliness created")
+    console.log("liveliness created");
     const serialisedMessage = Liveliness.encode(liveliness).finish();
-    console.log("liveliness encoded")
+    console.log("liveliness encoded");
     // Send the message using Light Push
     await node.lightPush.send(encoder, {
       payload: serialisedMessage,
     });
-    console.log(">>>> message sent")
+    console.log(">>>> message sent");
     router.push(`/blog/${id}`);
   };
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -91,42 +84,60 @@ const Blog: React.FC<BlogProps> = ({
   const random = faker.image.avatar();
 
   return (
-    <div className={styles.container} onClick={() => handleClick(id)} onMouseEnter={() => setHovered(true)}
+    <div
+      className={styles.container}
+      onClick={() => handleClick(id)}
+      onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         transition: "transform 0.2s ease-in-out",
         transform: hovered ? "scale(1.01)" : "scale(1)",
-      }}>
+      }}
+    >
       <div className={styles.subContainer}>
-        <Avatar alt="Avatar" src={randomImage} sx={{ height: "150px", width: "auto", borderRadius: "10px" }} />
+        <Avatar
+          alt="Avatar"
+          src={randomImage}
+          sx={{ height: "150px", width: "auto", borderRadius: "10px" }}
+        />
 
         <div className={styles.contentContainer}>
-          {isSlug && (
-            <a
-              target="_blank"
-              href={url}
-              className="text-gray-800 hover:underline"
+          <div style={{display:'flex',flexDirection:'row',gap:'8px',alignItems:'center'}}>
+            {isSlug && (
+              <a
+                target="_blank"
+                href={url}
+                className="text-gray-800 hover:underline"
+              >
+                <Typography
+                  {...FontVariant.HeadingBold20}
+                  color={colorPalette.popWhite[500]}
+                  style={{ fontSize: "22px" }}
+                >
+                  {heading}
+                </Typography>
+              </a>
+            )}
+            {!isSlug && (
+              <a target="_blank" className="text-gray-800 hover:underline">
+                <Typography
+                  {...FontVariant.HeadingBold20}
+                  color={colorPalette.popWhite[500]}
+                  style={{ fontSize: "22px" }}
+                >
+                  {heading}
+                </Typography>
+              </a>
+            )}
+
+            <Typography
+              {...FontVariant.HeadingRegular20}
+              color={colorPalette.popWhite[500]}
+              style={{ fontSize: "12px" }}
             >
-              <Typography
-                {...FontVariant.HeadingBold20}
-                color={colorPalette.popWhite[500]}
-                style={{ fontSize: "22px" }}
-              >
-                {heading}
-              </Typography>
-            </a>
-          )}
-          {!isSlug && (
-            <a target="_blank" className="text-gray-800 hover:underline">
-              <Typography
-                {...FontVariant.HeadingBold20}
-                color={colorPalette.popWhite[500]}
-                style={{ fontSize: "22px" }}
-              >
-                {heading}
-              </Typography>
-            </a>
-          )}
+             (posted on 22-12-2023)
+            </Typography>
+          </div>
 
           {url && (
             <div className={styles.externalLink}>
@@ -134,54 +145,50 @@ const Blog: React.FC<BlogProps> = ({
                 {url}🔗
               </a>
               {/* <span className="text-gray-700 text-sm self-end ml-2">{date}</span> */}
-              
             </div>
           )}
           {/* <span className={styles.date}>{new Date(date).toLocaleDateString()}</span> */}
-          <span className={styles.date}>09-12-2023</span>
-          
-      <div className="mb-2">
-        <Typography
-          {...FontVariant.HeadingRegular22}
-          color={colorPalette.popWhite[500]}
-          style={{ fontSize: "18px" }}
-        >
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi
-          officiis magnam veniam optio voluptatibus animi quos enim similique
-          odit deserunt! Lorem ipsum dolor sit, amet consectetur adipisicing
-          elit. Commodi officiis magnam veniam optio voluptatibus animi quos
-          enim similique odit deserunt! Lorem ipsum dolor sit, amet consectetur
-          adipisicing elit. Commodi officiis magnam veniam optio voluptatibus
-          animi quos enim similique odit deserunt!
-        </Typography>
-      </div>
 
-      <div className="flex justify-between items-center w-full">
-        {!isSlug && (
-          <Button
-            colorMode="light"
-            kind="elevated"
-            size="small"
-            style={{ marginRight: "12px" }}
-          >
-            {"Show Replies"}
-          </Button>
-        )}
+          <div className="mb-8">
+            <Typography
+              {...FontVariant.HeadingMedium20}
+              color={colorPalette.popWhite[500]}
+              style={{ fontSize: "16px" }}
+            >
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi
+              officiis magnam veniam optio voluptatibus animi quos enim
+              similique odit deserunt! Lorem ipsum dolor sit, amet consectetur
+              adipisicing elit. Commodi officiis magnam veniam optio
+              voluptatibus animi quos enim similique odit deserunt! Lorem ipsum
+              dolor sit, amet consectetur adipisicing elit. Commodi officiis
+              magnam veniam optio voluptatibus animi quos enim similique odit
+              deserunt!
+            </Typography>
+          </div>
 
-        
-        <Button
-          colorMode="light"
-          kind="link"
-          size="small"
-          style={{ marginRight: "12px" }}
-          onClick={(event: any) => handleLike(event)}
-        >
-          👍 {likes}
-        </Button>
-      </div>
+          <div className="flex justify-between items-center w-full ml-4">
+            {!isSlug && (
+              <Button
+                colorMode="light"
+                kind="elevated"
+                size="small"
+                style={{ marginRight: "12px" }}
+              >
+                {"Show Replies"}
+              </Button>
+            )}
 
+            <Button
+              colorMode="light"
+              kind="link"
+              size="small"
+              style={{ marginRight: "12px" }}
+              onClick={(event: any) => handleLike(event)}
+            >
+              👍 {likes}
+            </Button>
+          </div>
         </div>
-
       </div>
     </div>
   );

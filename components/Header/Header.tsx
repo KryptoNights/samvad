@@ -55,15 +55,15 @@ export const Header: React.FC<HeaderProps> = ({
   const [paycoinValue, setPayCoinValue] = useState<any | null>(0);
   const [file, setFile] = useState<File>();
 
-
-  const authToken = Buffer.from(`${process.env.NEXT_PUBLIC_API_KEY}:${process.env.NEXT_PUBLIC_API_SECRET}`).toString("base64");
+  const authToken = Buffer.from(
+    `${process.env.NEXT_PUBLIC_API_KEY}:${process.env.NEXT_PUBLIC_API_SECRET}`
+  ).toString("base64");
   const ipfs = create({
     host: "ipfs.infura.io",
     port: 5001,
     protocol: "https",
     headers: { Authorization: `Basic ${authToken}` },
   });
-
 
   const uploadImageToIPFS = async (file: any) => {
     console.log("clicked");
@@ -76,9 +76,9 @@ export const Header: React.FC<HeaderProps> = ({
           "Image uploaded successfully with CID:",
           fileAdded.cid.toString()
         );
-      
-        setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`)
-        console.log(url)
+
+        setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
+        console.log(url);
         // Perform actions with the CID or the uploaded file
       };
       reader.readAsArrayBuffer(file);
@@ -86,7 +86,6 @@ export const Header: React.FC<HeaderProps> = ({
       console.error("Error uploading image to IPFS:", error);
     }
   };
-
 
   const handleFileChange = async (event: any) => {
     const file = event.target.files[0]; // Assuming single file selection
@@ -136,14 +135,17 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const getBalanceinHeader = async () => {
-    try {
-      const address = accountData.address!;
-      const tx = await getBalance(address);
-      console.log(tx);
-      setPayCoinValue(tx);
-    } catch (error) {}
-  };
+  React.useEffect(() => {
+    const getBalanceinHeader = async () => {
+      try {
+        const address = accountData.address!;
+        const tx = await getBalance(address);
+        console.log(tx);
+        setPayCoinValue(tx);
+      } catch (error) {}
+    };
+    getBalanceinHeader();
+  }, []);
 
   const router = useRouter();
   function redirectToHome() {
@@ -170,10 +172,9 @@ export const Header: React.FC<HeaderProps> = ({
             style={{ marginRight: "12px" }}
             onClick={() => {
               handlePayCoinOpenModal();
-              getBalanceinHeader();
             }}
           >
-            Add Coin : {Number(paycoinValue/1e18).toFixed(2)}
+            Add Coin : {Number(paycoinValue / 1e18).toFixed(2)}
           </Button>
           <Button
             colorMode="light"
@@ -233,7 +234,6 @@ export const Header: React.FC<HeaderProps> = ({
               Amount
             </Typography>
             <InputField
-              autoFocus
               colorConfig={{
                 labelColor: "#0d0d0d",
                 textColor: "#000000",
@@ -244,11 +244,8 @@ export const Header: React.FC<HeaderProps> = ({
               inputMode="text"
               maxLength={30}
               onChange={(e: any) => {
-                const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
-                setAmount(onlyNumbers);
-                console.log(onlyNumbers);
+              setAmount(e.target.value)
               }}
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
               placeholder="enter amount to deposit"
               type="number"
               textStyle={styles.label}
@@ -307,14 +304,12 @@ export const Header: React.FC<HeaderProps> = ({
               Upload Image
             </Typography>
             <InputField
-              autoFocus
+        
               colorConfig={{
                 labelColor: "#0d0d0d",
                 textColor: "#000000",
               }}
               colorMode="light"
-              id="text_field"
-              inputMode="text"
               fullWidth
               onChange={handleFileChange}
               placeholder="Upload Image  "
@@ -335,17 +330,14 @@ export const Header: React.FC<HeaderProps> = ({
               Heading
             </Typography>
             <InputField
-              autoFocus
               colorConfig={{
                 labelColor: "#0d0d0d",
                 textColor: "#000000",
               }}
               colorMode="light"
-              id="text_field"
-              inputMode="text"
               value={heading}
               maxLength={60}
-              onChange={(e: any) => setHeading(e.target.value)}
+              onChange={(e:any) => setHeading(e.target.value)}
               placeholder="Enter Heading of Post"
               type="text"
               style={{
@@ -363,14 +355,11 @@ export const Header: React.FC<HeaderProps> = ({
               Content
             </Typography>
             <InputField
-              autoFocus
               colorConfig={{
                 labelColor: "#0d0d0d",
                 textColor: "#000000",
               }}
               colorMode="light"
-              id="text_field"
-              inputMode="text"
               value={text}
               onChange={(e: any) => setText(e.target.value)}
               placeholder="Enter Content of Post"
