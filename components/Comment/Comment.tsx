@@ -74,14 +74,14 @@ export default function Comment({
             connection: {
               retries: 3, // number of retries in case of error
             },
-            raw: false, // enable true to show all data
+            raw: true, // enable true to show all data
           }
         );
 
         stream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
           console.log(data.message.notification.body);
-          setNotificationData(data.message.notification.body);
-          showInfoToast(data.message.notification.body);
+          // setNotificationData(data.message.notification.body);
+          // showInfoToast(data.message.notification.body);
         });
 
         stream.connect();
@@ -94,31 +94,6 @@ export default function Comment({
     initializePushAPI();
   }, [postId]);
 
-  // const apiResponse = async () => {
-  //   const stream: any = await userAlice?.initStream([CONSTANTS.STREAM.NOTIF], {
-  //     filter: {
-  //       channels: ["*"], // pass in specific channels to only listen to those
-  //       chats: ["*"], // pass in specific chat ids to only listen to those
-  //     },
-  //     connection: {
-  //       retries: 3, // number of retries in case of error
-  //     },
-  //     raw: false, // enable true to show all data
-  //   });
-
-  //   stream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
-  //     console.log(data.message.notification.body);
-
-  //     // setNotificationData(data.message.notification.body);
-  //     // showInfoToast(data.message.notification.body);
-  //     // console.log("noti",NotificationData);
-  //     // console.log("data",data);
-  //   });
-
-  //   stream.connect();
-
-  //   console.log("user alice", userAlice);
-  // };
   const sendNotification = async () => {
     await userAlice?.channel.send(["*"], {
       notification: {

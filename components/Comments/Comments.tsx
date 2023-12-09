@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { debounce } from "../../src/utils/utils";
 import Comment from "../Comment/Comment";
 import useConnection from "@/utils/connection";
@@ -9,19 +9,11 @@ import { InputField } from "@cred/neopop-web/lib/components";
 import styles from "./comments.module.css";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
+import { showWarningToast } from "@/utils/notifications";
 
 const githubUserIds = [
-  23977234,
-  31523966,
-  3518527,
-  27022981,
-  68613247,
-  89782151,
-  72006591,
-  46043928,
-  46043428,
-  68611224,
-  89734451
+  23977234, 31523966, 3518527, 27022981, 68613247, 89782151, 72006591, 46043928,
+  46043428, 68611224, 89734451,
 ];
 
 export default function Comments({
@@ -69,7 +61,7 @@ export default function Comments({
 
   return (
     <div className={styles.container}>
-      <div style={{width:'100%'}}>
+      <div style={{ width: "100%" }}>
         <br />
         <Typography
           {...FontVariant.HeadingSemiBold22}
@@ -93,22 +85,31 @@ export default function Comments({
           }}
           type="text"
           textStyle={styles.label}
-          style={{ marginTop: "12px", marginBottom: "20px", paddingBottom: '6px', borderBottom: '2px solid #8A8A8A' }}
+          style={{
+            marginTop: "12px",
+            marginBottom: "20px",
+            paddingBottom: "6px",
+            borderBottom: "2px solid #8A8A8A",
+          }}
         />
         <Button
           colorMode="light"
           kind="elevated"
           size="Big"
-          style={{ color: colorPalette.popWhite[500], marginRight: "12px", marginBottom: "12px" }}
+          style={{
+            color: colorPalette.popWhite[500],
+            marginRight: "12px",
+            marginBottom: "12px",
+          }}
           onClick={() => {
             setCommentInput("");
-            onSubmit();
+            commentInput.length > 0 ? onSubmit() : showWarningToast("No text added");
           }}
         >
           Submit
         </Button>
       </div>
-      <div style={{ color: 'white',width:'100%' }}>
+      <div style={{ color: "white", width: "100%" }}>
         {replies?.map((reply: any) => (
           <Comment key={reply.id} reply={reply} postId={postId} />
         ))}

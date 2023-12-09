@@ -8,7 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPostData } from "@/store/slice/walletInfo";
 import { AppState } from "@/store";
 
-import { LightNode, Protocols, createDecoder, createLightNode, waitForRemotePeer } from "@waku/sdk";
+import {
+  LightNode,
+  Protocols,
+  createDecoder,
+  createLightNode,
+  waitForRemotePeer,
+} from "@waku/sdk";
 
 // Choose a content topic
 const contentTopic = `/samvad/0/posts/proto`;
@@ -27,11 +33,8 @@ interface LayoutProps {
   props: any;
 }
 
-
- 
-
 const Layout: React.FC<LayoutProps> = ({ props }) => {
-  const node=props.node
+  const node = props.node;
   const dispatch = useDispatch();
   const [posts]: any = useSelector((state: AppState) => [
     state.walletInfo.posts,
@@ -43,7 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
   const { signer } = useConnection();
 
   const getLiveliness = async (node: LightNode) => {
-    console.log(node)
+    console.log(node);
     // const node: LightNode = props.node!;
     // const node = await createLightNode({ defaultBootstrap: true });
     // await node.start();
@@ -61,26 +64,24 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
       // Here, it retrieves only the first page
       if (messages.length >= 100) return true;
     };
-    await node.store.queryWithOrderedCallback(
-      [decoder],
-      callback,
-      {timeFilter: {startTime, endTime}}
-    );
-  }
+    await node.store.queryWithOrderedCallback([decoder], callback, {
+      timeFilter: { startTime, endTime },
+    });
+  };
 
   // Define the useEffect hook
   useEffect(() => {
     // Create a function to fetch and set data
     const fetchData = async () => {
       try {
-        console.log('hey',node)
+        console.log("hey", node);
         setLoading(true);
         const posts = await getAllPosts();
         console.log(posts);
         setblogData(posts);
         dispatch(setPostData({ post: posts }));
         const liveliness = await getLiveliness(node);
-        console.log("liveliness")
+        console.log("liveliness");
         console.log(liveliness);
         setLoading(false);
       } catch (error) {
@@ -100,7 +101,13 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
     <div style={{ width: "100%", paddingLeft: "20px", paddingRight: "20px" }}>
       {loading ? (
         <>
-          <div style={{display:'flex',justifyContent:'center',marginTop:'200px'}}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "200px",
+            }}
+          >
             <CircularProgress size={40} sx={{ color: "#3B82F6" }} />
           </div>
         </>
