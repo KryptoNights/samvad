@@ -10,7 +10,7 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 
 import { createEncoder, createDecoder, LightNode } from "@waku/sdk";
 import protobuf from "protobufjs";
-const Liveliness = new protobuf.Type("Liveliness").add(
+export const Liveliness = new protobuf.Type("Liveliness").add(
   new protobuf.Field("id", 1, "uint64")
 );
 
