@@ -49,6 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [payCoinOpenModal, setpayCoinOpenModal] = useState(false);
   const [withdrawCoinOpenModal, setwithDrawCoinOpenModal] = useState(false);
   const [url, setUrl] = useState("");
+  const [mediaUrl, setmediaUrl] = useState("");
   const [heading, setHeading] = useState("");
   const [text, setText] = useState("");
   const [amount, setAmount] = useState("");
@@ -77,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({
           fileAdded.cid.toString()
         );
 
-        setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
+        setmediaUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
         console.log(url);
         // Perform actions with the CID or the uploaded file
       };
@@ -107,7 +108,7 @@ export const Header: React.FC<HeaderProps> = ({
     console.log("Text:", text);
 
     try {
-      await createPost(url, text, heading, signer!);
+      await createPost(mediaUrl, url, text, heading, signer!);
       handleCloseModal();
       console.log("created");
     } catch (error) {

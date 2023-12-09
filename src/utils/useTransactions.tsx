@@ -173,6 +173,7 @@ const useTransactions = () => {
   };
 
   const createPost = async (
+    mediaUrl: string,
     url: string,
     text: string,
     heading: string,
@@ -189,7 +190,7 @@ const useTransactions = () => {
     try {
       if (networkjs.chainId == 43113) {
         const samvad = new Contract(avalanche.samvadCC, samvadcc_abi, signer);
-        const tx = await samvad.createPost(url, text, heading);
+        const tx = await samvad.createPost(mediaUrl, url, text, heading);
         await tx.wait();
         console.log(tx);
         setTxnLoading(false);
@@ -198,7 +199,7 @@ const useTransactions = () => {
       console.log("network");
       console.log();
       const samvad = new Contract(sepolia.samvad, samvad_abi, signer);
-      const tx = await samvad.createPost(url, text, heading);
+      const tx = await samvad.createPost(mediaUrl, url, text, heading);
       await tx.wait();
       console.log(tx);
       setTxnLoading(false);
