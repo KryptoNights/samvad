@@ -14,7 +14,8 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 import { CircularProgress } from "@mui/material";
 import { create } from "ipfs-http-client";
 import * as fs from "fs";
-import { showWarningToast } from "@/utils/notifications";
+import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
+import { showInfoToast } from "@/utils/notifications";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
@@ -55,6 +56,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [amount, setAmount] = useState("");
   const [paycoinValue, setPayCoinValue] = useState<any | null>(0);
   const [file, setFile] = useState<File>();
+  const [NotificationData, setNotificationData] = useState("");
 
   const authToken = Buffer.from(
     `${process.env.NEXT_PUBLIC_API_KEY}:${process.env.NEXT_PUBLIC_API_SECRET}`
@@ -65,6 +67,55 @@ export const Header: React.FC<HeaderProps> = ({
     protocol: "https",
     headers: { Authorization: `Basic ${authToken}` },
   });
+
+  const [userAlice, setUserAlice] = useState<PushAPI | null>(null);
+
+  const initializePushAPI = async () => {
+    try {
+      const user = await PushAPI.initialize(signer, {
+        env: "staging",
+      });
+      setUserAlice(user);
+    } catch (error) {
+      console.error("Error initializing PushAPI:", error);
+    }
+  };
+
+  const apiResponse = async () => {
+    initializePushAPI();
+
+    const stream: any = await userAlice?.initStream([CONSTANTS.STREAM.NOTIF], {
+      filter: {
+        channels: ["*"], // pass in specific channels to only listen to those
+        chats: ["*"], // pass in specific chat ids to only listen to those
+      },
+      connection: {
+        retries: 3, // number of retries in case of error
+      },
+      raw: false, // enable true to show all data
+    });
+
+    stream.on(CONSTANTS.STREAM.NOTIF, (data: any) => {
+      setNotificationData(data.message.notification.body);
+      // showInfoToast(data.message.notification.body);
+      // console.log("noti",NotificationData);
+      // console.log("data",data);
+    });
+
+    stream.connect();
+
+    console.log("user alice", userAlice);
+  };
+
+  const sendNotification = async () => {
+    await userAlice?.channel.send(["*"], {
+      notification: {
+        title: "Hello",
+        body: "web3",
+      },
+    });
+    showInfoToast(NotificationData);
+  };
 
   const uploadImageToIPFS = async (file: any) => {
     console.log("clicked");
@@ -80,7 +131,6 @@ export const Header: React.FC<HeaderProps> = ({
 
         setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
         console.log(url);
-
         // Perform actions with the CID or the uploaded file
       };
       reader.readAsArrayBuffer(file);
@@ -184,7 +234,8 @@ export const Header: React.FC<HeaderProps> = ({
         >
           SAMVAD
         </Typography>
-
+        <h1 onClick={apiResponse}>ok</h1>
+        <h1 onClick={sendNotification}>send</h1>
         <div style={{ display: "flex" }}>
           <Button
             colorMode="light"
