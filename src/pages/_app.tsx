@@ -60,11 +60,21 @@ export function App({ Component, pageProps }: AppProps) {
 
   const [node, messages] = useNode();
   console.log(">>>> messages")
-  console.log(messages)
-  console.log(messages[0])
+  const liveliness = new Map<number, number>();
+  for (const message of messages) {
+    // histogram of liveliness
+    const id = message.id;
+    if (liveliness.has(id)) {
+      liveliness.set(id, liveliness.get(id)! + 1);
+    } else {
+      liveliness.set(id, 1);
+    }
+  }
+  console.log("liveliness")
+  console.log(liveliness)
   return (
     <>
-      <Component {...pageProps} connectionData={combinedData} connectionTransaction={CombinedTransaction} node={node} />
+      <Component {...pageProps} connectionData={combinedData} connectionTransaction={CombinedTransaction} node={node} liveliness={liveliness} />
       <ToastContainer
         position="top-right"
         autoClose={5000}
