@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createLightNode, LightNode, waitForRemotePeer, Protocols, createDecoder } from "@waku/sdk";
+import { Liveliness } from "../../components/Blog/Blog";
 
 declare global {
     interface Window {
@@ -31,10 +32,10 @@ const useNode = (): [LightNode | null, Array<any>] => {
       // await new Promise( resolve => setTimeout(resolve, 2000) );
 
       const endTime = new Date();
-      const startTime = new Date(endTime.getTime() - 1000 * 60 * 60 * 24); // 24 hours ago
+      const startTime = new Date(endTime.getTime() - 1000 * 60 * 60 * 1); // 1 hours ago
       const _messages: any = []
       const callback = (wakuMessage: any) => {
-        _messages.push(wakuMessage);
+        _messages.push(Liveliness.decode(wakuMessage.payload));
         // Return "true" to stop retrieving pages
         // Here, it retrieves only the first page
         if (_messages.length >= 100) return true;

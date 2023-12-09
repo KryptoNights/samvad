@@ -44,7 +44,7 @@ export default function Comment({
     try {
       await createReply(
         postId,
-        1,
+        reply.id,
         replyText,
         false,
         "10000000000000000",

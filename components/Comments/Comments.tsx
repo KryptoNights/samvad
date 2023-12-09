@@ -55,7 +55,7 @@ export default function Comments({
     try {
       await createReply(
         postId,
-        1,
+        postId,
         commentInput,
         true,
         "10000000000000000",
