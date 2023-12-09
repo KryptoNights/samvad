@@ -9,7 +9,11 @@
   "author": "debjit-bw",
   "license": "ISC",
   "devDependencies": {
+    "@chainlink/contracts-ccip": "^1.2.1",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "hardhat": "^2.19.2"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "^0.8.0"
   }
 }
