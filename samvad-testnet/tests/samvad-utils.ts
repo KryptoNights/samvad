@@ -9,6 +9,7 @@ import {
 export function createPostCreatedEvent(
   account: Address,
   id: BigInt,
+  mediaUrl: string,
   url: string,
   text: string,
   heading: string
@@ -22,6 +23,9 @@ export function createPostCreatedEvent(
   )
   postCreatedEvent.parameters.push(
     new ethereum.EventParam("id", ethereum.Value.fromUnsignedBigInt(id))
+  )
+  postCreatedEvent.parameters.push(
+    new ethereum.EventParam("mediaUrl", ethereum.Value.fromString(mediaUrl))
   )
   postCreatedEvent.parameters.push(
     new ethereum.EventParam("url", ethereum.Value.fromString(url))
@@ -41,7 +45,8 @@ export function createReplyCreatedEvent(
   id: BigInt,
   text: string,
   post: BigInt,
-  parent: BigInt
+  parent: BigInt,
+  top_level: boolean
 ): ReplyCreated {
   let replyCreatedEvent = changetype<ReplyCreated>(newMockEvent())
 
@@ -61,6 +66,9 @@ export function createReplyCreatedEvent(
   )
   replyCreatedEvent.parameters.push(
     new ethereum.EventParam("parent", ethereum.Value.fromUnsignedBigInt(parent))
+  )
+  replyCreatedEvent.parameters.push(
+    new ethereum.EventParam("top_level", ethereum.Value.fromBoolean(top_level))
   )
 
   return replyCreatedEvent

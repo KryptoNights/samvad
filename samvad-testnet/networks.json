@@ -1,8 +1,8 @@
 {
   "sepolia": {
     "Samvad": {
-      "address": "0xCDa8c8999575BDF3B68255d82a82Fbe0C8b346a4",
-      "startBlock": 4780616
+      "address": "0x0c3C77F1302F98f15D0151866f810cFF2955EECA",
+      "startBlock": 4854218
     }
   }
 }

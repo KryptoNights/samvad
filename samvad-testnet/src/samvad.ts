@@ -15,6 +15,7 @@ export function handlePostCreated(event: PostCreatedEvent): void {
   )
   entity.account = event.params.account
   entity.Samvad_id = event.params.id
+  entity.mediaUrl = event.params.mediaUrl
   entity.url = event.params.url
   entity.text = event.params.text
   entity.heading = event.params.heading
@@ -35,6 +36,7 @@ export function handleReplyCreated(event: ReplyCreatedEvent): void {
   entity.text = event.params.text
   entity.post = event.params.post
   entity.parent = event.params.parent
+  entity.top_level = event.params.top_level
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

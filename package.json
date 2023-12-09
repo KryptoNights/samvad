@@ -52,6 +52,7 @@
     "@chainlink/contracts-ccip": "^0.7.6",
     "@types/aos": "^3.0.4",
     "autoprefixer": "^10.4.16",
+    "hardhat": "^2.19.2",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5"
   }

@@ -21,12 +21,14 @@ describe("Describe entity assertions", () => {
       "0x0000000000000000000000000000000000000001"
     )
     let id = BigInt.fromI32(234)
+    let mediaUrl = "Example string value"
     let url = "Example string value"
     let text = "Example string value"
     let heading = "Example string value"
     let newPostCreatedEvent = createPostCreatedEvent(
       account,
       id,
+      mediaUrl,
       url,
       text,
       heading
@@ -50,6 +52,12 @@ describe("Describe entity assertions", () => {
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "account",
       "0x0000000000000000000000000000000000000001"
+    )
+    assert.fieldEquals(
+      "PostCreated",
+      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
+      "mediaUrl",
+      "Example string value"
     )
     assert.fieldEquals(
       "PostCreated",

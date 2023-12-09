@@ -2,6 +2,7 @@ type PostCreated @entity(immutable: true) {
   id: Bytes!
   account: Bytes! # address
   Samvad_id: BigInt! # uint256
+  mediaUrl: String! # string
   url: String! # string
   text: String! # string
   heading: String! # string
@@ -17,6 +18,7 @@ type ReplyCreated @entity(immutable: true) {
   text: String! # string
   post: BigInt! # uint256
   parent: BigInt! # uint256
+  top_level: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!

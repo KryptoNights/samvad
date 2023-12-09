@@ -49,6 +49,12 @@
       {
         "indexed": false,
         "internalType": "string",
+        "name": "mediaUrl",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
         "name": "url",
         "type": "string"
       },
@@ -100,6 +106,12 @@
         "internalType": "uint256",
         "name": "parent",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "top_level",
+        "type": "bool"
       }
     ],
     "name": "ReplyCreated",
@@ -204,6 +216,7 @@
   },
   {
     "inputs": [
+      { "internalType": "string", "name": "mediaUrl", "type": "string" },
       { "internalType": "string", "name": "url", "type": "string" },
       { "internalType": "string", "name": "text", "type": "string" },
       { "internalType": "string", "name": "heading", "type": "string" }
@@ -321,6 +334,7 @@
     "outputs": [
       { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "string", "name": "mediaUrl", "type": "string" },
       { "internalType": "string", "name": "url", "type": "string" },
       { "internalType": "string", "name": "text", "type": "string" },
       { "internalType": "string", "name": "heading", "type": "string" }
