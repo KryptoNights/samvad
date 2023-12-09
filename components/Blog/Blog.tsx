@@ -98,7 +98,7 @@ const Blog: React.FC<BlogProps> = ({
         transform: hovered ? "scale(1.01)" : "scale(1)",
       }}>
       <div className={styles.subContainer}>
-        <Avatar alt="Avatar" src={randomImage} sx={{ height: "400px", width: "auto", borderRadius: "30px" }} />
+        <Avatar alt="Avatar" src={randomImage} sx={{ height: "150px", width: "auto", borderRadius: "30px" }} />
 
         <div className={styles.contentContainer}>
           {isSlug && (
