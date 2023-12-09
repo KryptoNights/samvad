@@ -58,7 +58,9 @@ export function App({ Component, pageProps }: AppProps) {
     signer,
   };
 
-  const node = useNode();
+  const [node, messages] = useNode();
+  console.log(">>>> messages")
+  console.log(messages)
   return (
     <>
       <Component {...pageProps} connectionData={combinedData} connectionTransaction={CombinedTransaction} node={node} />
