@@ -24,6 +24,7 @@ interface BlogProps {
   blogData: any;
   isSlug: boolean;
   props: any;
+  address:any
 }
 const githubUserIds = [
   23977234, 31523966, 3518527, 27022981, 68613247, 89782151, 72006591, 46043928,
@@ -48,8 +49,11 @@ const Blog: React.FC<BlogProps> = ({
   replies,
   blogData,
   isSlug,
+  address,
   props,
 }) => {
+
+  console.log('assa',)
   const router = useRouter();
   const [likes, setLikes] = useState(0);
   const [randomImage, setRandomImage] = useState<string>("");
@@ -141,7 +145,10 @@ const Blog: React.FC<BlogProps> = ({
               color={colorPalette.popWhite[500]}
               style={{ fontSize: "12px" }}
             >
-             (posted on 22-12-2023)
+            {`(By : ${address.slice(
+              0,
+              4
+            )}...${address.slice(-4)})`}
             </Typography>
           </div>
 
@@ -153,7 +160,6 @@ const Blog: React.FC<BlogProps> = ({
               {/* <span className="text-gray-700 text-sm self-end ml-2">{date}</span> */}
             </div>
           )}
-          {/* <span className={styles.date}>{new Date(date).toLocaleDateString()}</span> */}
 
           <div className="mb-8">
             <Typography

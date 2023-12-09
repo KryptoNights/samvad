@@ -11,6 +11,7 @@ const Slug = (props: any) => {
 
   const [post, setPost]: any = React.useState([]);
   const [replies, setReplies] = useState([]);
+  const [address,setAddress]=React.useState("");
   console.log("resplies", replies);
 
   useEffect(() => {
@@ -25,8 +26,12 @@ const Slug = (props: any) => {
     };
     if (post.length === 0) {
       fetchData();
+    }else{
+      setAddress(post.address)
     }
   }, [slug, post]);
+
+  console.log('post',post)
 
   return (
     <>
@@ -38,6 +43,7 @@ const Slug = (props: any) => {
             key={post.id}
             replies={replies}
             setReplies={setReplies}
+            address={address}
             setblogData={setPost}
             isSlug={true}
             {...post}

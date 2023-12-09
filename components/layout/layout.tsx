@@ -94,6 +94,8 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
       fetchData();
     }
   }, [blogData]);
+
+  console.log('blog',blogData)
   return (
     <div style={{ width: "100%", paddingLeft: "20px", paddingRight: "20px" }}>
       {loading ? (
@@ -110,6 +112,7 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
               show={show}
               setShow={setShow}
               blogData={blogData}
+              address={blog.address}
               isSlug={false}
               {...blog}
               props={props}
