@@ -8,7 +8,7 @@ import { Button } from "@cred/neopop-web/lib/components";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 
-import { createEncoder, createDecoder } from "@waku/sdk";
+import { createEncoder, createDecoder, LightNode } from "@waku/sdk";
 import protobuf from "protobufjs";
 const Liveliness = new protobuf.Type("Liveliness").add(
   new protobuf.Field("id", 1, "uint64")
@@ -63,17 +63,23 @@ const Blog: React.FC<BlogProps> = ({
   }, []);
 
   const handleClick = async (id: any) => {
-    const node = props.node;
-    console.log("node got");
-    const liveliness = Liveliness.create({ id: id });
-    console.log("liveliness created");
-    const serialisedMessage = Liveliness.encode(liveliness).finish();
-    console.log("liveliness encoded");
-    // Send the message using Light Push
-    await node.lightPush.send(encoder, {
-      payload: serialisedMessage,
-    });
-    console.log(">>>> message sent");
+    try {
+      console.log("props inside blog")
+      console.log(props)
+      const node: LightNode = props.node;
+      console.log("node got")
+      const liveliness = Liveliness.create({ id: id });
+      console.log("liveliness created")
+      const serialisedMessage = Liveliness.encode(liveliness).finish();
+      console.log("liveliness encoded")
+      // Send the message using Light Push
+      await node.lightPush.send(encoder, {
+        payload: serialisedMessage,
+      });
+      console.log(">>>> message sent")
+    } catch (error) {
+      console.log(error);
+    }
     router.push(`/blog/${id}`);
   };
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
