@@ -9,7 +9,7 @@ import {
 } from "./configs";
 import { showFailureToast, showSuccessToast } from "./notifications";
 const useTransactions = () => {
-  const sepoliaProvider = new ethers.JsonRpcProvider("https://1rpc.io/sepolia");
+  const sepoliaProvider = new ethers.providers.JsonRpcProvider("https://1rpc.io/sepolia");
   // const sepoliaProvider = new ethers.JsonRpcProvider("https://rpc.sepolia.org");
   // provider: ethers.Provider | ethers.Signer
   // const [handleSuccessSnackbar, handleWarningSnackbar, handleInfoSnackbar] =
@@ -103,7 +103,7 @@ const useTransactions = () => {
   const addPaycoins = async (_amount: number, signer: ethers.Signer) => {
     const amount = BigInt(_amount) * BigInt("1000000000000000000");
     setTxnLoading(true);
-    const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+    const networkjs = await signer.provider?.getNetwork()!
     console.log("chain", networkjs)
     // err if chain id not in [1, 43113]
     if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
@@ -142,7 +142,7 @@ const useTransactions = () => {
 
   const withdrawPaycoins = async (amount: number, signer: ethers.Signer) => {
     setTxnLoading(true);
-    const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+    const networkjs = (await signer.provider?.getNetwork())!
     // err if chain id not in [1, 43113]
     if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
       console.log("only sepolia and avalanche fuji supported rn");
@@ -178,7 +178,7 @@ const useTransactions = () => {
     heading: string,
     signer: ethers.Signer
   ) => {
-    const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+    const networkjs = (await signer.provider?.getNetwork())!
     setTxnLoading(true);
     // err if chain id not in [1, 43113]
     if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
@@ -221,7 +221,7 @@ const useTransactions = () => {
     signer: ethers.Signer
   ) => {
     setTxnLoading(true);
-    const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+    const networkjs = (await signer.provider?.getNetwork())!
     // err if chain id not in [1, 43113]
     console.log(networkjs.chainId);
 
