@@ -3,13 +3,20 @@ import { AccountType } from "../layout/layout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { Button } from "@cred/neopop-web/lib/components";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { InputField } from "@cred/neopop-web/lib/components";
 import useConnection from "@/utils/connection";
-import { createPost } from "@/utils/transition";
+import { useRouter } from "next/router";
+import styles from "./header.module.css";
+import { Typography } from "@cred/neopop-web/lib/components";
+import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
+import { CircularProgress } from "@mui/material";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
+  onDisconnect: () => void;
+  props: any;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,13 +25,33 @@ export const Header: React.FC<HeaderProps> = ({
   chainId,
   network,
   onConnect,
+  onDisconnect,
+  props,
 }: HeaderProps) => {
-  const { signer } = useConnection();
+  const {
+    txnLoading,
+    testProvider,
+    getBalance,
+    getReplyCount,
+    getReply,
+    getPost,
+    getAllPosts,
+    addPaycoins,
+    withdrawPaycoins,
+    createPost,
+    createReply,
+  } = props.connectionTransaction;
+
+  const { signer, accountData } = useConnection();
   const [openModal, setOpenModal] = useState(false);
+  const [payCoinOpenModal, setpayCoinOpenModal] = useState(false);
   const [url, setUrl] = useState("");
   const [heading, setHeading] = useState("");
   const [text, setText] = useState("");
+  const [amount, setAmount] = useState("");
+  const [paycoinValue, setPayCoinValue] = useState<any | null>(0);
 
+  //Add post Modal
   const handleOpenModal = () => {
     setOpenModal(true);
   };
@@ -32,106 +59,191 @@ export const Header: React.FC<HeaderProps> = ({
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-
   const handleModalSubmit = async () => {
     console.log("URL:", url);
     console.log("Heading:", heading);
     console.log("Text:", text);
-    handleCloseModal();
 
     try {
-      await createPost(url, text, heading, signer!, "sepolio");
+      await createPost(url, text, heading, signer!);
+      handleCloseModal();
       console.log("created");
     } catch (error) {
       console.error("Error creating post:", error);
+      handleCloseModal();
     }
   };
 
+  // Paycoin Modal
+  const handlePayCoinOpenModal = () => {
+    setpayCoinOpenModal(true);
+  };
+  const handlePayCoinCloseModal = () => {
+    setpayCoinOpenModal(false);
+  };
+  const handlePayCoinModalSubmit = async () => {
+    console.log("Amount:", amount);
+    try {
+      await addPaycoins(amount, signer!);
+      console.log("created");
+      handlePayCoinCloseModal();
+    } catch (error) {
+      console.error("Error adding amount:", error);
+      handlePayCoinCloseModal();
+    }
+  };
+
+  const getBalanceinHeader = async () => {
+    try {
+      const address = accountData.address!;
+      const tx = await getBalance(address);
+      console.log(tx);
+      setPayCoinValue(tx);
+    } catch (error) {}
+  };
+
+  const router = useRouter();
+  function redirectToHome() {
+    router.push("/");
+  }
+
   return (
     <>
-      <div className="bg-gray-800 text-white p-4 flex flex-col md:flex-row justify-between items-center">
-        <div className="text-3xl font-bold mb-4 md:mb-0">SAMVAD</div>
-        <div className="flex items-center space-x-4 mb-4 md:mb-0">
-          <div className="flex items-center">
-            🟢 <span className="ml-1">{address ?? "Wallet Address"}</span>
-          </div>
-          <div className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={24}
-              height={24}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="inline-block ml-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-              />
-            </svg>
-            <span className="ml-1">{balance ?? "Balance"}</span>
-          </div>
-          <div className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={24}
-              height={24}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="inline-block ml-2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-              />
-            </svg>
-            <span className="ml-1">{chainId ?? "Chain ID"}</span>
-          </div>
-          <div className="flex items-center">
-            <svg
-              width={24}
-              height={24}
-              viewBox="0 0 1024 1024"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              className="inline-block ml-2"
-            >
-              <path d="M1024.26 141.82c0-77.04-62.46-139.5-139.5-139.5s-139.5 62.46-139.5 139.5c0 52.26 28.74 97.8 71.27 121.69l-55.6 246.87c-1.38-0.04-2.77-0.07-4.17-0.07-38.52 0-73.39 15.61-98.63 40.85l-254.64-147a140.05 140.05 0 0 0 3.78-32.34c0-77.04-62.46-139.5-139.5-139.5s-139.5 62.46-139.5 139.5c0 51.45 27.86 96.39 69.32 120.58l-56.9 252.62c-0.4 0-0.79-0.01-1.18-0.01C62.46 745 0 807.46 0 884.5S62.46 1024 139.5 1024 279 961.54 279 884.5c0-51.25-27.65-96.04-68.83-120.29l56.96-252.89c0.21 0 0.43 0.01 0.64 0.01 39.99 0 76.05-16.83 101.48-43.79L622.06 613.5a139.612 139.612 0 0 0-4.79 36.34c0 77.04 62.46 139.5 139.5 139.5s139.5-62.46 139.5-139.5c0-50.15-26.47-94.12-66.2-118.7l56.27-249.82c76.31-0.86 137.92-62.98 137.92-139.5z m-884.5 809.42c-37.19 0-67.42-30.25-67.42-67.42 0-37.19 30.23-67.42 67.42-67.42 37.17 0 67.42 30.23 67.42 67.42 0 37.17-30.25 67.42-67.42 67.42z m128.27-512.67c-37.19 0-67.42-30.25-67.42-67.42 0-37.19 30.23-67.42 67.42-67.42 37.17 0 67.42 30.23 67.42 67.42 0 37.17-30.25 67.42-67.42 67.42z m489 278c-37.19 0-67.42-30.25-67.42-67.42 0-37.19 30.23-67.42 67.42-67.42 37.17 0 67.42 30.23 67.42 67.42 0 37.17-30.25 67.42-67.42 67.42z m128-642.84c37.17 0 67.42 30.23 67.42 67.42 0 37.17-30.25 67.42-67.42 67.42-37.19 0-67.42-30.25-67.42-67.42 0-37.19 30.23-67.42 67.42-67.42z" />
-            </svg>
-            <span className="ml-1">{network ?? "Network"}</span>
-          </div>
-        </div>
-        <div>
-          <button
+      <div className={styles.container}>
+        <Typography
+          {...FontVariant.HeadingBold20}
+          color={colorPalette.popWhite[800]}
+          onClick={redirectToHome}
+          style={{ fontSize: "36px" }}
+        >
+          SAMVAD
+        </Typography>
+
+        <div style={{ display: "flex" }}>
+          <Button
+            colorMode="light"
+            kind="elevated"
+            size="big"
+            style={{ marginRight: "12px" }}
+            onClick={() => {
+              handlePayCoinOpenModal();
+              getBalanceinHeader();
+            }}
+          >
+            Add Coin : {Number(paycoinValue).toFixed(2)}
+          </Button>
+          <Button
+            colorMode="light"
+            kind="elevated"
+            size="big"
+            style={{ marginRight: "12px" }}
             onClick={handleOpenModal}
-            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
           >
             Add Post
-          </button>
-          <button
-            onClick={onConnect}
-            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer ml-4"
-          >
-            Connect
-          </button>
+          </Button>
+
+          {address ? (
+            <>
+              <Button
+                colorMode="light"
+                kind="elevated"
+                size="big"
+                onClick={onDisconnect}
+              >
+                🟢 {address && address.length > 8
+                  ? `${address.slice(0, 4)}...${address.slice(-4)}`
+                  : address}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                colorMode="light"
+                kind="elevated"
+                size="big"
+                onClick={onConnect}
+              >
+                Connect
+              </Button>
+            </>
+          )}
         </div>
-        <Modal open={openModal} onClose={handleCloseModal}>
+        <Modal open={payCoinOpenModal} onClose={handlePayCoinCloseModal}>
           <Box
             sx={{
-              width: "90%",
+              width: "600px",
               p: 4,
               mx: "auto",
               my: "10%",
-              backgroundColor: "white",
-              borderRadius: "md",
+              backgroundColor: "#EFEFEF",
+              borderRadius: "1px solid #8A8A8A",
               outline: "none",
-              boxShadow: "2xl",
+              position: "relative",
+            }}
+          >
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Amount
+            </Typography>
+            <InputField
+              autoFocus
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              id="text_field"
+              value={amount}
+              inputMode="text"
+              maxLength={30}
+              onChange={(e: any) => {
+                const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
+                setAmount(onlyNumbers);
+                console.log(onlyNumbers);
+              }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              placeholder="enter amount to deposit"
+              type="number"
+              textStyle={styles.label}
+              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+            />
+            <CancelIcon
+              onClick={handlePayCoinCloseModal}
+              className="absolute top-2 right-2 cursor-pointer"
+            />
+
+            <Button
+              colorMode="dark"
+              kind="elevated"
+              size="big"
+              style={{ marginTop: "32px" }}
+         
+              onClick={handlePayCoinModalSubmit}
+            >
+              {txnLoading ? (
+                <div className={styles.flex}>
+                  Transaction in Progress{" "}
+                  <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
+                </div>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </Box>
+        </Modal>
+        <Modal open={openModal} onClose={handleCloseModal}>
+          <Box
+            sx={{
+              width: "1000px",
+              p: 5,
+              mx: "auto",
+              my: "10%",
+              backgroundColor: "#EFEFEF",
+              borderRadius: "1px solid #8A8A8A",
+              outline: "none",
               position: "relative",
             }}
           >
@@ -139,37 +251,89 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={handleCloseModal}
               className="absolute top-2 right-2 cursor-pointer"
             />
-            <TextField
-              label="URL"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Url
+            </Typography>
+            <InputField
+              autoFocus
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              id="text_field"
+              inputMode="text"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-            <TextField
-              label="Heading"
-              variant="outlined"
               fullWidth
-              margin="normal"
+              onChange={(e: any) => setUrl(e.target.value)}
+              placeholder="Enter any refrence URL  "
+              type="text"
+              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+            />
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Heading
+            </Typography>
+            <InputField
+              autoFocus
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              id="text_field"
+              inputMode="text"
               value={heading}
-              onChange={(e) => setHeading(e.target.value)}
+              maxLength={60}
+              onChange={(e: any) => setHeading(e.target.value)}
+              placeholder="Enter Heading of Post"
+              type="text"
+              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
             />
-            <TextField
-              label="Text"
-              variant="outlined"
-              fullWidth
-              margin="normal"
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Content
+            </Typography>
+            <InputField
+              autoFocus
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              id="text_field"
+              inputMode="text"
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e: any) => setText(e.target.value)}
+              placeholder="Enter Content of Post"
+              type="text"
+              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
             />
             <Button
-              variant="contained"
-              color="primary"
+              colorMode="dark"
+              kind="elevated"
+              size="big"
+              style={{ marginTop: "32px" }}
               onClick={handleModalSubmit}
-              className="mt-4"
             >
-              Submit
+              {txnLoading ? (
+                <div className={styles.flex}>
+                  Transaction in Progress{" "}
+                  <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
+                </div>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </Box>
         </Modal>
