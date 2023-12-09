@@ -32,6 +32,7 @@ contract Samvad is CCIPReceiver {
         address account;
         uint256 id;
         // contents
+        string mediaUrl;
         string url;
         string text;
         string heading;
@@ -55,6 +56,7 @@ contract Samvad is CCIPReceiver {
     event PostCreated(
         address account,
         uint256 id,
+        string mediaUrl,
         string url,
         string text,
         string heading
@@ -99,6 +101,7 @@ contract Samvad is CCIPReceiver {
 
     function _internal_createPost(
         address user,
+        string memory mediaUrl,
         string memory url,
         string memory text,
         string memory heading
@@ -107,12 +110,13 @@ contract Samvad is CCIPReceiver {
         posts[post_counter] = Post(
             user,
             post_counter,
+            mediaUrl,
             url,
             text,
             heading,
             new uint256[](0)
         );
-        emit PostCreated(user, post_counter, url, text, heading);
+        emit PostCreated(user, post_counter, mediaUrl, url, text, heading);
     }
 
     function _internal_createReply(
@@ -213,7 +217,7 @@ contract Samvad is CCIPReceiver {
                     )
                 );
             if (_type == 0) {
-                _internal_createPost(_sender, _url, _text, _heading);
+                _internal_createPost(_sender, "mediaUrl", _url, _text, _heading);
             } else if (_type == 1) {
                 _internal_createReply(
                     _sender,
@@ -246,11 +250,12 @@ contract Samvad is CCIPReceiver {
     }
 
     function createPost(
+        string memory mediaUrl,
         string memory url,
         string memory text,
         string memory heading
     ) public {
-        _internal_createPost(msg.sender, url, text, heading);
+        _internal_createPost(msg.sender, mediaUrl, url, text, heading);
     }
 
     function createReply(
