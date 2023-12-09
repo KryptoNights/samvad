@@ -100,11 +100,13 @@ const useTransactions = () => {
     return posts;
   };
 
-  const addPaycoins = async (amount: number, signer: ethers.Signer) => {
+  const addPaycoins = async (_amount: number, signer: ethers.Signer) => {
+    const amount = BigInt(_amount) * BigInt("1000000000000000000");
     setTxnLoading(true);
     const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+    console.log("chain", networkjs)
     // err if chain id not in [1, 43113]
-    if (networkjs.chainId != 43113 && networkjs.chainId != 1) {
+    if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
       console.log("only sepolia and avalanche fuji supported rn");
       return false;
     }
@@ -142,7 +144,7 @@ const useTransactions = () => {
     setTxnLoading(true);
     const networkjs = (await signer.provider?.getNetwork())?.toJSON();
     // err if chain id not in [1, 43113]
-    if (networkjs.chainId != 43113 && networkjs.chainId != 1) {
+    if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
       console.log("only sepolia and avalanche fuji supported rn");
       setTxnLoading(false);
       return false;
@@ -179,7 +181,7 @@ const useTransactions = () => {
     const networkjs = (await signer.provider?.getNetwork())?.toJSON();
     setTxnLoading(true);
     // err if chain id not in [1, 43113]
-    if (networkjs.chainId != 43113 && networkjs.chainId != 1) {
+    if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
       console.log("only sepolia and avalanche fuji supported rn");
       setTxnLoading(false);
       return false;
@@ -225,8 +227,8 @@ const useTransactions = () => {
 
     if (
       networkjs.chainId != 43113 &&
-      networkjs.chainId != 11155111 &&
-      networkjs.chainId != 1
+      networkjs.chainId != 111551111155111 &&
+      networkjs.chainId != 11155111
     ) {
       console.log("only sepolia and avalanche fuji supported rn");
       setTxnLoading(false);
