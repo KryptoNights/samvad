@@ -1,6 +1,6 @@
 import useConnection from "@/utils/connection";
 import useTransactions from "@/utils/useTransactions";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@cred/neopop-web/lib/components";
 import { InputField } from "@cred/neopop-web/lib/components";
 
@@ -18,8 +18,10 @@ export default function Comment({
 
   const [replyText, setReplyText] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
+
   const inputEl: any = useRef(null);
   console.log("this is reply", reply);
+
 
   const onSubmit = async () => {
     try {
@@ -34,6 +36,7 @@ export default function Comment({
     } catch (error) {
       console.log("failed");
       console.log(error);
+
     }
   };
 
@@ -41,17 +44,18 @@ export default function Comment({
     <div key={reply.id} className="border border-gray-300 p-4 mb-4">
       <div className="flex items-start">
         <div className="flex-shrink-0">
-          <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+          <div className="w-8 h-8 bg-gray-500 rounded-full">
+            
+          </div>
         </div>
         <div className="ml-4">
           <p className="font-bold">{reply.text}</p>
           {!showReplyBox && (
             <button
               type="button"
-              className="text-gray-500 hover:text-blue-500"
+              className="text-white-500 hover:text-blue-500"
               onClick={() => {
                 setShowReplyBox(true);
-                setTimeout(() => inputEl.current.focus());
               }}
             >
               Reply
@@ -61,15 +65,7 @@ export default function Comment({
       </div>
       {showReplyBox && (
         <div className="mt-4">
-          <textarea
-            id={reply.id}
-            ref={inputEl}
-            className="border border-gray-300 rounded p-2"
-            onChange={(e) => {
-              setReplyText(e.target.value);
-            }}
-          />
-          {/* <InputField
+          <InputField
             autoFocus
             colorConfig={{
               labelColor: "#FFFFFF",
@@ -85,10 +81,10 @@ export default function Comment({
             }}
             type="text"
             style={{ marginTop: "12px", marginBottom: "20px", paddingBottom: '6px', borderBottom: '2px solid #8A8A8A' }}
-          /> */}
+          />
           <div className="flex mt-2">
             <Button
-            type="button"
+              type="button"
               colorMode="light"
               kind="elevated"
               size="big"

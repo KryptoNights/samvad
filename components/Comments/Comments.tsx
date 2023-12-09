@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { debounce } from "../../src/utils/utils";
 import Comment from "../Comment/Comment";
 import useConnection from "@/utils/connection";
 import useTransactions from "@/utils/useTransactions";
+import { Avatar } from "@mui/material";
 import { Button } from "@cred/neopop-web/lib/components";
 import { InputField } from "@cred/neopop-web/lib/components";
 import styles from "./comments.module.css";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 
+const githubUserIds = [
+  23977234,
+  31523966,
+  3518527,
+  27022981,
+  68613247,
+  89782151,
+  72006591,
+  46043928,
+  46043428,
+  68611224,
+  89734451
+];
 
 export default function Comments({
   replies,
@@ -22,6 +36,20 @@ export default function Comments({
   console.log("replies", replies);
 
   const [commentInput, setCommentInput] = useState("");
+  const [randomImages, setRandomImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    const generateRandomImages = () => {
+      const images = replies?.map(() => {
+        const randomUserId =
+          githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
+        return `https://avatars.githubusercontent.com/u/${randomUserId}`;
+      });
+      setRandomImages(images || []);
+    };
+
+    generateRandomImages();
+  }, [replies]);
 
   const onSubmit = async () => {
     try {
