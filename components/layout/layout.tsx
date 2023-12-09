@@ -23,7 +23,15 @@ export interface AccountType {
   network?: string;
 }
 
-const Layout = ({props}:{props:any}) => {
+interface LayoutProps {
+  props: any;
+}
+
+
+ 
+
+const Layout: React.FC<LayoutProps> = ({ props }) => {
+  const node=props.node
   const dispatch = useDispatch();
   const [posts]: any = useSelector((state: AppState) => [
     state.walletInfo.posts,
@@ -65,17 +73,15 @@ const Layout = ({props}:{props:any}) => {
     // Create a function to fetch and set data
     const fetchData = async () => {
       try {
-        console.log("props")
-        console.log(props)
-        const node: LightNode = props.node!;
-        const liveliness = await getLiveliness(props.node!);
-        console.log("liveliness")
-        console.log(liveliness);
+        console.log('hey',node)
         setLoading(true);
         const posts = await getAllPosts();
         console.log(posts);
         setblogData(posts);
         dispatch(setPostData({ post: posts }));
+        const liveliness = await getLiveliness(node);
+        console.log("liveliness")
+        console.log(liveliness);
         setLoading(false);
       } catch (error) {
         setLoading(false);
