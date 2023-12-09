@@ -1,0 +1,15 @@
+{
+  "name": "samvad",
+  "version": "1.0.0",
+  "description": "samvad is a cross-chain social app that incentivizes meaningful conversations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "debjit-bw",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.2"
+  }
+}
