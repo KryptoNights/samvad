@@ -48,6 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
   const { signer, accountData } = useConnection();
   const [openModal, setOpenModal] = useState(false);
   const [payCoinOpenModal, setpayCoinOpenModal] = useState(false);
+  const [withdrawCoinOpenModal, setwithDrawCoinOpenModal] = useState(false);
   const [url, setUrl] = useState("");
   const [heading, setHeading] = useState("");
   const [text, setText] = useState("");
@@ -79,6 +80,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`);
         console.log(url);
+
         // Perform actions with the CID or the uploaded file
       };
       reader.readAsArrayBuffer(file);
@@ -116,6 +118,23 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handlewithDrawCoinOpenModal = () => {
+    setwithDrawCoinOpenModal(true);
+  };
+  const handlewithDrawCoinCloseModal = () => {
+    setwithDrawCoinOpenModal(false);
+  };
+  const handlewithDrawCoinModalSubmit = async () => {
+    console.log("Amount:", amount);
+    try {
+      await withdrawPaycoins(amount, signer!);
+      console.log("created");
+      handlewithDrawCoinCloseModal();
+    } catch (error) {
+      console.error("Error withdrawing amount:", error);
+      handlewithDrawCoinCloseModal();
+    }
+  };
   // Paycoin Modal
   const handlePayCoinOpenModal = () => {
     setpayCoinOpenModal(true);
@@ -135,6 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+
   React.useEffect(() => {
     const getBalanceinHeader = async () => {
       try {
@@ -146,6 +166,7 @@ export const Header: React.FC<HeaderProps> = ({
     };
     getBalanceinHeader();
   }, []);
+
 
   const router = useRouter();
   function redirectToHome() {
@@ -165,6 +186,18 @@ export const Header: React.FC<HeaderProps> = ({
         </Typography>
 
         <div style={{ display: "flex" }}>
+          <Button
+            colorMode="light"
+            kind="elevated"
+            size="big"
+            style={{ marginRight: "12px" }}
+            onClick={() => {
+              handlewithDrawCoinOpenModal();
+              getBalanceinHeader();
+            }}
+          >
+            Withdraw Coin
+          </Button>
           <Button
             colorMode="light"
             kind="elevated"
@@ -213,6 +246,77 @@ export const Header: React.FC<HeaderProps> = ({
             </>
           )}
         </div>
+        <Modal open={withdrawCoinOpenModal} onClose={handlewithDrawCoinCloseModal}>
+          <Box
+            sx={{
+              width: "600px",
+              p: 4,
+              mx: "auto",
+              my: "10%",
+              backgroundColor: "#EFEFEF",
+              borderRadius: "1px solid #8A8A8A",
+              outline: "none",
+              position: "relative",
+            }}
+          >
+            <Typography
+              {...FontVariant.HeadingSemiBold22}
+              color={colorPalette.popBlack[500]}
+              style={{ fontSize: "18px" }}
+            >
+              Amount
+            </Typography>
+            <InputField
+              autoFocus
+              colorConfig={{
+                labelColor: "#0d0d0d",
+                textColor: "#000000",
+              }}
+              colorMode="light"
+              id="text_field"
+              value={amount}
+              inputMode="text"
+              maxLength={30}
+              onChange={(e: any) => {
+                const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
+                setAmount(onlyNumbers);
+                console.log(onlyNumbers);
+              }}
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              placeholder="enter amount to Withdraw"
+              type="number"
+              textStyle={styles.label}
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
+            />
+            <CancelIcon
+              onClick={handlewithDrawCoinCloseModal}
+              className="absolute top-2 right-2 cursor-pointer"
+            />
+
+            <Button
+              colorMode="dark"
+              kind="elevated"
+              size="big"
+              style={{ marginTop: "32px" }}
+              onClick={handlewithDrawCoinModalSubmit}
+            >
+              {txnLoading ? (
+                <div className={styles.flex}>
+                  Transaction in Progress{" "}
+                  <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
+                </div>
+              ) : (
+                "Submit"
+              )}
+            </Button>
+          </Box>
+        </Modal>
+
         <Modal open={payCoinOpenModal} onClose={handlePayCoinCloseModal}>
           <Box
             sx={{

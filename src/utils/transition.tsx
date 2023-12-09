@@ -103,7 +103,7 @@ export async function getAllPosts() {
 }
 
 export async function addPaycoins(amount: number, signer: ethers.Signer) {
-  const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+  const networkjs = (await signer.provider?.getNetwork())!
   // err if chain id not in [1, 43113]
   if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
     console.log("only sepolia and avalanche fuji supported rn");
@@ -136,7 +136,7 @@ export async function addPaycoins(amount: number, signer: ethers.Signer) {
 }
 
 export async function withdrawPaycoins(amount: number, signer: ethers.Signer) {
-  const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+  const networkjs = (await signer.provider?.getNetwork())!
   // err if chain id not in [1, 43113]
   if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
     console.log("only sepolia and avalanche fuji supported rn");
@@ -167,7 +167,7 @@ export async function createPost(
   heading: string,
   signer: ethers.Signer
 ) {
-  const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+  const networkjs = (await signer.provider?.getNetwork())!
   console.log(networkjs);
   // err if chain id not in [1, 43113]
   if (networkjs.chainId != 43113 && networkjs.chainId != 11155111) {
@@ -203,7 +203,7 @@ export async function createReply(
   amount: string,
   signer: ethers.Signer
 ) {
-  const networkjs = (await signer.provider?.getNetwork())?.toJSON();
+  const networkjs = (await signer.provider?.getNetwork())!
   // err if chain id not in [1, 43113]
   console.log(networkjs.chainId);
 
