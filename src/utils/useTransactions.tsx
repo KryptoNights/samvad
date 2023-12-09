@@ -77,9 +77,10 @@ const useTransactions = () => {
     const post = {
       address: _post[0].toString(),
       id: _post[1].toString(),
-      url: _post[2].toString(),
-      text: _post[3].toString(),
-      heading: _post[4].toString(),
+      mediaUrl: _post[2].toString(),
+      url: _post[3].toString(),
+      text: _post[4].toString(),
+      heading: _post[5].toString(),
       replies: [] as any[],
     };
     for (let i = 0; i < _post[5].length; i++) {

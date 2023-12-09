@@ -167,14 +167,7 @@ const Blog: React.FC<BlogProps> = ({
               color={colorPalette.popWhite[500]}
               style={{ fontSize: "16px" }}
             >
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi
-              officiis magnam veniam optio voluptatibus animi quos enim
-              similique odit deserunt! Lorem ipsum dolor sit, amet consectetur
-              adipisicing elit. Commodi officiis magnam veniam optio
-              voluptatibus animi quos enim similique odit deserunt! Lorem ipsum
-              dolor sit, amet consectetur adipisicing elit. Commodi officiis
-              magnam veniam optio voluptatibus animi quos enim similique odit
-              deserunt!
+             {text}
             </Typography>
           </div>
 
