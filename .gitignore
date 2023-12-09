@@ -13,4 +13,5 @@ node_modules
 /coverage
 /coverage.json
 
+/dist
 .DS_Store

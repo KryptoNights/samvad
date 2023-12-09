@@ -15,7 +15,7 @@ export interface AccountType {
   network?: string;
 }
 
-const Layout = () => {
+const Layout = ({props}:{props:any}) => {
   const dispatch = useDispatch();
   const [posts]: any = useSelector((state: AppState) => [
     state.walletInfo.posts,
@@ -66,6 +66,7 @@ const Layout = () => {
               blogData={blogData}
               isSlug={false}
               {...blog}
+              props={props}
             />
           ))}
         </>

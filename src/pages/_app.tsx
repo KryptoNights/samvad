@@ -9,6 +9,7 @@ import { wrapper } from "./../store/index";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useTransactions from "@/utils/useTransactions";
+import useNode from "@/utils/getNode";
 
 export function App({ Component, pageProps }: AppProps) {
   const {
@@ -56,9 +57,11 @@ export function App({ Component, pageProps }: AppProps) {
     provider,
     signer,
   };
+
+  const node = useNode();
   return (
     <>
-      <Component {...pageProps} connectionData={combinedData} connectionTransaction={CombinedTransaction} />
+      <Component {...pageProps} connectionData={combinedData} connectionTransaction={CombinedTransaction} node={node} />
       <ToastContainer
         position="top-right"
         autoClose={5000}

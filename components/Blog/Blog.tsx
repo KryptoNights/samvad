@@ -8,6 +8,10 @@ import { Button } from "@cred/neopop-web/lib/components";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 
+import { createEncoder, createDecoder } from "@waku/sdk";
+import protobuf from "protobufjs";
+const Liveliness = new protobuf.Type("Liveliness")
+    .add(new protobuf.Field("id", 1, "uint64"));
 
 interface BlogProps {
   id: number;
@@ -18,6 +22,7 @@ interface BlogProps {
   text: string;
   blogData: any;
   isSlug: boolean;
+  props:any
 }
 const githubUserIds = [
   23977234,
@@ -33,6 +38,15 @@ const githubUserIds = [
   89734451
 ];
 
+// Choose a content topic
+const contentTopic = `/samvad/0/posts/proto`;
+// Create a message encoder and decoder
+const encoder = createEncoder({
+    contentTopic: contentTopic, // message content topic
+    ephemeral: false, // allows messages be stored on the network
+});
+const decoder = createDecoder(contentTopic);
+
 const Blog: React.FC<BlogProps> = ({
   id,
   heading,
@@ -42,6 +56,7 @@ const Blog: React.FC<BlogProps> = ({
   replies,
   blogData,
   isSlug,
+  props,
 }) => {
   const router = useRouter();
   const [likes, setLikes] = useState(0);
@@ -54,7 +69,18 @@ const Blog: React.FC<BlogProps> = ({
     setRandomImage(avatarUrl);
   }, []);
 
-  const handleClick = (id: any) => {
+  const handleClick = async (id: any) => {
+    const node = props.node;
+    console.log("node got")
+    const liveliness = Liveliness.create({ id: id });
+    console.log("liveliness created")
+    const serialisedMessage = Liveliness.encode(liveliness).finish();
+    console.log("liveliness encoded")
+    // Send the message using Light Push
+    await node.lightPush.send(encoder, {
+      payload: serialisedMessage,
+    });
+    console.log(">>>> message sent")
     router.push(`/blog/${id}`);
   };
   const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
