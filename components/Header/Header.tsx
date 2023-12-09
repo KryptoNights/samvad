@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { AccountType } from "../layout/layout";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
@@ -12,6 +12,8 @@ import styles from "./header.module.css";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 import { CircularProgress } from "@mui/material";
+import { create } from "ipfs-http-client";
+import * as fs from "fs";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
@@ -50,6 +52,46 @@ export const Header: React.FC<HeaderProps> = ({
   const [text, setText] = useState("");
   const [amount, setAmount] = useState("");
   const [paycoinValue, setPayCoinValue] = useState<any | null>(0);
+  const [file, setFile] = useState<File>();
+
+
+  const authToken = Buffer.from(`${process.env.NEXT_PUBLIC_API_KEY}:${process.env.NEXT_PUBLIC_API_SECRET}`).toString("base64");
+  const ipfs = create({
+    host: "ipfs.infura.io",
+    port: 5001,
+    protocol: "https",
+    headers: { Authorization: `Basic ${authToken}` },
+  });
+
+
+  const uploadImageToIPFS = async (file: any) => {
+    console.log("clicked");
+    try {
+      const reader: any = new FileReader();
+      reader.onloadend = async () => {
+        const buffer = Buffer.from(reader.result);
+        const fileAdded = await ipfs.add(buffer);
+        console.log(
+          "Image uploaded successfully with CID:",
+          fileAdded.cid.toString()
+        );
+      
+        setUrl(`https://ipfs.io/ipfs/${fileAdded.cid.toString()}`)
+        console.log(url)
+        // Perform actions with the CID or the uploaded file
+      };
+      reader.readAsArrayBuffer(file);
+    } catch (error) {
+      console.error("Error uploading image to IPFS:", error);
+    }
+  };
+
+
+  const handleFileChange = async (event: any) => {
+    const file = event.target.files[0]; // Assuming single file selection
+    if (!file) return; // Handle case when no file is selected
+    uploadImageToIPFS(file);
+  };
 
   //Add post Modal
   const handleOpenModal = () => {
@@ -119,6 +161,7 @@ export const Header: React.FC<HeaderProps> = ({
           SAMVAD
         </Typography>
 
+
         <div style={{ display: "flex" }}>
           <Button
             colorMode="light"
@@ -150,7 +193,8 @@ export const Header: React.FC<HeaderProps> = ({
                 size="big"
                 onClick={onDisconnect}
               >
-                🟢 {address && address.length > 8
+                🟢{" "}
+                {address && address.length > 8
                   ? `${address.slice(0, 4)}...${address.slice(-4)}`
                   : address}
               </Button>
@@ -208,7 +252,12 @@ export const Header: React.FC<HeaderProps> = ({
               placeholder="enter amount to deposit"
               type="number"
               textStyle={styles.label}
-              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
             />
             <CancelIcon
               onClick={handlePayCoinCloseModal}
@@ -220,7 +269,6 @@ export const Header: React.FC<HeaderProps> = ({
               kind="elevated"
               size="big"
               style={{ marginTop: "32px" }}
-         
               onClick={handlePayCoinModalSubmit}
             >
               {txnLoading ? (
@@ -256,7 +304,7 @@ export const Header: React.FC<HeaderProps> = ({
               color={colorPalette.popBlack[500]}
               style={{ fontSize: "18px" }}
             >
-              Url
+              Upload Image
             </Typography>
             <InputField
               autoFocus
@@ -267,13 +315,18 @@ export const Header: React.FC<HeaderProps> = ({
               colorMode="light"
               id="text_field"
               inputMode="text"
-              value={url}
               fullWidth
-              onChange={(e: any) => setUrl(e.target.value)}
-              placeholder="Enter any refrence URL  "
-              type="text"
-              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+              onChange={handleFileChange}
+              placeholder="Upload Image  "
+              type="file"
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
             />
+
             <Typography
               {...FontVariant.HeadingSemiBold22}
               color={colorPalette.popBlack[500]}
@@ -295,7 +348,12 @@ export const Header: React.FC<HeaderProps> = ({
               onChange={(e: any) => setHeading(e.target.value)}
               placeholder="Enter Heading of Post"
               type="text"
-              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
             />
             <Typography
               {...FontVariant.HeadingSemiBold22}
@@ -317,7 +375,12 @@ export const Header: React.FC<HeaderProps> = ({
               onChange={(e: any) => setText(e.target.value)}
               placeholder="Enter Content of Post"
               type="text"
-              style={{ marginTop: "12px", marginBottom: "34px",paddingBottom:'6px',borderBottom:'2px solid #8A8A8A' }}
+              style={{
+                marginTop: "12px",
+                marginBottom: "34px",
+                paddingBottom: "6px",
+                borderBottom: "2px solid #8A8A8A",
+              }}
             />
             <Button
               colorMode="dark"
