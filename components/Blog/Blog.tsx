@@ -24,6 +24,7 @@ interface BlogProps {
   blogData: any;
   isSlug: boolean;
   props: any;
+  mediaUrl:any;
   address:any
 }
 const githubUserIds = [
@@ -50,21 +51,22 @@ const Blog: React.FC<BlogProps> = ({
   blogData,
   isSlug,
   address,
+  mediaUrl,
   props,
 }) => {
 
-  console.log('assa',)
+  
   const router = useRouter();
   const [likes, setLikes] = useState(0);
   const [randomImage, setRandomImage] = useState<string>("");
   const [hovered, setHovered] = useState<boolean>(false);
 
-  useEffect(() => {
-    const randomUserId =
-      githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
-    const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
-    setRandomImage(avatarUrl);
-  }, []);
+  // useEffect(() => {
+  //   const randomUserId =
+  //     githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
+  //   const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
+  //   setRandomImage(avatarUrl);
+  // }, []);
 
   const handleClick = async (id: any) => {
     try {
@@ -90,7 +92,7 @@ const Blog: React.FC<BlogProps> = ({
     event.stopPropagation();
     setLikes(likes + 1);
   };
-
+  console.log('url',mediaUrl)
   const random = faker.image.avatar();
 
   return (
@@ -107,7 +109,7 @@ const Blog: React.FC<BlogProps> = ({
       <div className={styles.subContainer}>
         <Avatar
           alt="Avatar"
-          src={randomImage}
+          src={url}
           sx={{ height: "150px", width: "auto", borderRadius: "10px" }}
         />
 

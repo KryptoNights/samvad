@@ -44,6 +44,7 @@ const Slug = (props: any) => {
             replies={replies}
             setReplies={setReplies}
             address={address}
+            mediaUrl={''}
             setblogData={setPost}
             isSlug={true}
             {...post}
