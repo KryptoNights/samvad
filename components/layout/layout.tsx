@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import Blog from "../Blog/Blog";
-import { getAllPosts } from "@/utils/transition";
+import { createReply, getAllPosts } from "@/utils/transition";
+import { ethers } from "ethers";
+import { CircularProgress } from "@mui/material";
+import useConnection from "@/utils/connection";
+import { useDispatch, useSelector } from "react-redux";
+import { setPostData } from "@/store/slice/walletInfo";
+import { AppState } from "@/store";
 
 export interface AccountType {
   address?: string;
@@ -10,46 +16,60 @@ export interface AccountType {
 }
 
 const Layout = () => {
-  const [blogData, setblogData ]:any = useState([]);
+  const dispatch = useDispatch();
+  const [posts]: any = useSelector((state: AppState) => [
+    state.walletInfo.posts,
+  ]);
+
+  const [blogData, setblogData]: any = useState([]);
   const [show, setShow] = useState(false);
-  console.log("blogdata", blogData);
-  
+  const [loading, setLoading] = useState(false);
+  const { signer } = useConnection();
 
   // Define the useEffect hook
   useEffect(() => {
     // Create a function to fetch and set data
     const fetchData = async () => {
       try {
-          const posts = await getAllPosts();
-          console.log('posts',blogData)
-          setblogData(posts);
+        setLoading(true);
+        const posts = await getAllPosts();
+        console.log(posts);
+        setblogData(posts);
+        dispatch(setPostData({ post: posts }));
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        setLoading(false);
+        console.error("Error fetching data:", error);
       }
     };
-
-    // Call the fetchData function
-    if(blogData.length===0){
+    if (posts.length) {
+      setblogData(posts);
+    } else {
       fetchData();
     }
- 
   }, [blogData]);
-  console.log('blog',blogData)
   return (
-    <div>
-      <div>
-        <div>
-          {blogData.map((blog:any) => (
+    <div style={{ width: "100%", paddingLeft: "20px", paddingRight: "20px" }}>
+      {loading ? (
+        <>
+          <div style={{display:'flex',justifyContent:'center',marginTop:'200px'}}>
+            <CircularProgress size={40} sx={{ color: "#3B82F6" }} />
+          </div>
+        </>
+      ) : (
+        <>
+          {blogData.map((blog: any) => (
             <Blog
               key={blog.id}
               show={show}
               setShow={setShow}
               blogData={blogData}
+              isSlug={false}
               {...blog}
             />
           ))}
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

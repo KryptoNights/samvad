@@ -1,11 +1,18 @@
 import React from "react";
 import Layout from "../../components/layout/layout";
 
-export default function Home() {
+import GlobalLayout from "../../components/Global/Global";
+
+export default function Home(props:any) {
+
+
+
   return (
     <>
       <div>
-        <Layout />
+        <GlobalLayout props={props}>
+          <Layout />
+        </GlobalLayout>
       </div>
     </>
   );
