@@ -160,7 +160,6 @@ const Blog: React.FC<BlogProps> = ({
               {/* <span className="text-gray-700 text-sm self-end ml-2">{date}</span> */}
             </div>
           )}
-          {/* <span className={styles.date}>{new Date(date).toLocaleDateString()}</span> */}
 
           <div className="mb-8">
             <Typography
