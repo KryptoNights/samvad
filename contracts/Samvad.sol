@@ -64,7 +64,8 @@ contract Samvad is CCIPReceiver {
         uint256 id,
         string text,
         uint256 post,
-        uint256 parent
+        uint256 parent,
+        bool top_level
     );
 
     event TokensTransferred(
@@ -177,7 +178,7 @@ contract Samvad is CCIPReceiver {
         }
 
         // emit event
-        emit ReplyCreated(user, reply_counter, text, post, parent);
+        emit ReplyCreated(user, reply_counter, text, post, parent, top_level);
     }
 
     // external (eth) create functions
