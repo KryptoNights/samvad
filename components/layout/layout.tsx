@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Blog from "../Blog/Blog";
-import { createReply, getAllPosts } from "@/utils/transition";
 import { ethers } from "ethers";
 import { CircularProgress } from "@mui/material";
 import useConnection from "@/utils/connection";
@@ -39,6 +38,20 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
   const [posts]: any = useSelector((state: AppState) => [
     state.walletInfo.posts,
   ]);
+
+  const {
+    txnLoading,
+    testProvider,
+    getBalance,
+    getReplyCount,
+    getReply,
+    getPost,
+    getAllPosts,
+    addPaycoins,
+    withdrawPaycoins,
+    createPost,
+    createReply,
+  } = props.connectionTransaction;
 
   const [blogData, setblogData]: any = useState([]);
   const [show, setShow] = useState(false);
@@ -121,6 +134,7 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
               blogData={blogData}
               address={blog.address}
               isSlug={false}
+              mediaUrl={blog.mediaUrl}
               {...blog}
               props={props}
             />
