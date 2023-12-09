@@ -1,0 +1,12 @@
+.container{
+    width: 100%;
+    border: 1.5px solid #FBFBFB;
+    padding: 12px 12px 12px 12px;
+    margin-top: 12px;
+    background: #3D3D3D;
+    border-radius: 4px;
+}
+
+.aa{
+    font-size: 10px;
+}

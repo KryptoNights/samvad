@@ -3,7 +3,8 @@ import useTransactions from "@/utils/useTransactions";
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@cred/neopop-web/lib/components";
 import { InputField } from "@cred/neopop-web/lib/components";
-
+import styles from './comment.module.css'
+import { Avatar } from "@mui/material";
 
 
 export default function Comment({
@@ -13,8 +14,24 @@ export default function Comment({
   reply: any;
   postId: number;
 }) {
+
+  const githubUserIds = [
+    23977234, 31523966, 3518527, 27022981, 68613247, 89782151, 72006591, 46043928,
+    46043428, 68611224, 89734451,
+  ];
+  
+  const [randomImage, setRandomImage] = useState<string>("");
+
+  useEffect(() => {
+    const randomUserId =
+      githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
+    const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
+    setRandomImage(avatarUrl);
+  }, []);
+  
   const { signer } = useConnection();
   const { createReply } = useTransactions();
+
 
   const [replyText, setReplyText] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
@@ -41,15 +58,22 @@ export default function Comment({
   };
 
   return (
-    <div key={reply.id} className="border border-gray-300 p-4 mb-4">
+    <div key={reply.id} className={styles.container}>
       <div className="flex items-start">
         <div className="flex-shrink-0">
-          <div className="w-8 h-8 bg-gray-500 rounded-full">
-            
-          </div>
+        <Avatar
+          alt="Avatar"
+          src={randomImage}
+          sx={{ height: "40px", width: "auto", borderRadius: "50%" }}
+        />
         </div>
         <div className="ml-4">
+          <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
+
+      
           <p className="font-bold">{reply.text}</p>
+          <div className={styles.aa}>{`(By : ${reply.address.slice(0, 4)}...${reply.address.slice(-4)})`}</div>
+          </div>
           {!showReplyBox && (
             <button
               type="button"
