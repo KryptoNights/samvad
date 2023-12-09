@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Comments from "../Comments/Comments";
 import { useRouter } from "next/router";
 import styles from "./blog.module.css";
@@ -7,6 +7,7 @@ import { Avatar } from "@mui/material";
 import { Button } from "@cred/neopop-web/lib/components";
 import { Typography } from "@cred/neopop-web/lib/components";
 import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
+
 
 interface BlogProps {
   id: number;
@@ -45,6 +46,7 @@ const Blog: React.FC<BlogProps> = ({
   const router = useRouter();
   const [likes, setLikes] = useState(0);
   const [randomImage, setRandomImage] = useState<string>("");
+  const [hovered, setHovered] = useState<boolean>(false);
 
   useEffect(() => {
     const randomUserId = githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
@@ -63,45 +65,55 @@ const Blog: React.FC<BlogProps> = ({
   const random = faker.image.avatar();
 
   return (
-    <div className={styles.container} onClick={() => handleClick(id)}>
+    <div className={styles.container} onClick={() => handleClick(id)} onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        transition: "transform 0.2s ease-in-out",
+        transform: hovered ? "scale(1.01)" : "scale(1)",
+      }}>
       <div className={styles.subContainer}>
-        <Avatar alt="Avatar" src={randomImage} sx={{ height: 40, width: 40 }} />
+        <Avatar alt="Avatar" src={randomImage} sx={{ height: "400px", width: "auto", borderRadius: "30px" }} />
 
-        {isSlug && (
-          <a
-            target="_blank"
-            href={url}
-            className="ml-4 text-gray-800 hover:underline"
-          >
-            <Typography
-              {...FontVariant.HeadingBold20}
-              color={colorPalette.popBlack[500]}
-              style={{ fontSize: "22px" }}
+        <div className={styles.contentContainer}>
+          {isSlug && (
+            <a
+              target="_blank"
+              href={url}
+              className="text-gray-800 hover:underline"
             >
-              {heading}
-            </Typography>
-          </a>
-        )}
-        {!isSlug && (
-          <a target="_blank" className="ml-4 text-gray-800 hover:underline">
-            <Typography
-              {...FontVariant.HeadingBold20}
-              color={colorPalette.popWhite[500]}
-              style={{ fontSize: "22px" }}
-            >
-              {heading}
-            </Typography>
-          </a>
-        )}
-      </div>
-      {url && (
-        <div className={styles.externalLink}>
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            {url}🔗
-          </a>
-        </div>
-      )}
+              <Typography
+                {...FontVariant.HeadingBold20}
+                color={colorPalette.popWhite[500]}
+                style={{ fontSize: "22px" }}
+              >
+                {heading}
+              </Typography>
+            </a>
+          )}
+          {!isSlug && (
+            <a target="_blank" className="text-gray-800 hover:underline">
+              <Typography
+                {...FontVariant.HeadingBold20}
+                color={colorPalette.popWhite[500]}
+                style={{ fontSize: "22px" }}
+              >
+                {heading}
+              </Typography>
+            </a>
+          )}
 
+          {url && (
+            <div className={styles.externalLink}>
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {url}🔗
+              </a>
+              {/* <span className="text-gray-700 text-sm self-end ml-2">{date}</span> */}
+              
+            </div>
+          )}
+          {/* <span className={styles.date}>{new Date(date).toLocaleDateString()}</span> */}
+          <span className={styles.date}>09-12-2023</span>
+          
       <div className="mb-2">
         <Typography
           {...FontVariant.HeadingRegular22}
@@ -130,7 +142,7 @@ const Blog: React.FC<BlogProps> = ({
           </Button>
         )}
 
-        <span className="text-gray-700 text-sm self-end">{date}</span>
+        
         <Button
           colorMode="light"
           kind="link"
@@ -140,6 +152,10 @@ const Blog: React.FC<BlogProps> = ({
         >
           👍 {likes}
         </Button>
+      </div>
+
+        </div>
+
       </div>
     </div>
   );
