@@ -49,7 +49,7 @@ const useConnection = () => {
 
         const preparedData = {
           address,
-          balance: ethers.formatEther(balance),
+          balance: ethers.utils.formatEther(balance),
           chainId: network.chainId.toString(),
           network: network.name,
         };
@@ -75,7 +75,7 @@ const useConnection = () => {
     const ethereum: any = await window.ethereum;
     // Create an ethers.js provider using the injected provider from MetaMask
     // And get the signer (account) from the provider
-    const signer = await new ethers.BrowserProvider(ethereum).getSigner();
+    const signer = await new ethers.providers.Web3Provider(ethereum).getSigner();
     try {
       // Sign the message
       console.log("ass", signer);
