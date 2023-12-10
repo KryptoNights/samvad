@@ -68,6 +68,7 @@ const Slug = (props: any) => {
                 setblogData={setPost}
                 isSlug={true}
                 {...post}
+                props={props}
               />
               <Comments postId={post.id} replies={post.replies} />
             </>

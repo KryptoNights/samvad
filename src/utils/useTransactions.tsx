@@ -215,7 +215,8 @@ const useTransactions = () => {
     }
   };
 
-  const withdrawPaycoins = async (amount: number, signer: ethers.Signer) => {
+  const withdrawPaycoins = async (_amount: number, signer: ethers.Signer) => {
+    const amount = BigInt(_amount) * BigInt("1000000000000000000");
     setTxnLoading(true);
     const networkjs = (await signer.provider?.getNetwork())!
     // err if chain id not in [1, 43113]
