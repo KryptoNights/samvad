@@ -14,6 +14,7 @@ import { colorPalette, FontVariant } from "@cred/neopop-web/lib/primitives";
 import { CircularProgress } from "@mui/material";
 import { create } from "ipfs-http-client";
 import * as fs from "fs";
+import useGasFees from "@/utils/getGasEstimation";
 
 interface HeaderProps extends AccountType {
   onConnect: () => void;
@@ -181,6 +182,9 @@ export const Header: React.FC<HeaderProps> = ({
     router.push("/");
   }
 
+  const gasFees: any = useGasFees();
+  console.log("gas", gasFees);
+
   return (
     <>
       <div className={styles.container}>
@@ -284,6 +288,23 @@ export const Header: React.FC<HeaderProps> = ({
                 borderBottom: "2px solid #8A8A8A",
               }}
             />
+
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Typography
+                {...FontVariant.HeadingNormal12}
+                color={colorPalette.popBlack[500]}
+                style={{ fontSize: "14px" }}
+              >
+                Estimated Gas Fees :
+              </Typography>{" "}
+              <Typography
+                {...FontVariant.HeadingNormal12}
+                color={colorPalette.popBlack[500]}
+                style={{ fontSize: "14px" }}
+              >
+                {Number((gasFees?.estimatedBaseFee * 80000) / 1e9).toFixed(4)}{' '}eth
+              </Typography>
+            </div>
             <CancelIcon
               onClick={handlePayCoinCloseModal}
               className="absolute top-2 right-2 cursor-pointer"
@@ -439,6 +460,23 @@ export const Header: React.FC<HeaderProps> = ({
                 borderBottom: "2px solid #8A8A8A",
               }}
             />
+
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <Typography
+                {...FontVariant.HeadingNormal12}
+                color={colorPalette.popBlack[500]}
+                style={{ fontSize: "14px" }}
+              >
+                Estimated Gas Fees :
+              </Typography>{" "}
+              <Typography
+                {...FontVariant.HeadingNormal12}
+                color={colorPalette.popBlack[500]}
+                style={{ fontSize: "14px" }}
+              >
+                {Number((gasFees?.estimatedBaseFee * 500000) / 1e9).toFixed(4)}{' '}eth
+              </Typography>
+            </div>
             <Button
               colorMode="dark"
               kind="elevated"
