@@ -192,7 +192,7 @@ export const Header: React.FC<HeaderProps> = ({
           {...FontVariant.HeadingBold20}
           color={colorPalette.popWhite[800]}
           onClick={redirectToHome}
-          style={{ fontSize: "36px" }}
+          style={{ fontSize: "36px",cursor:'pointer' }}
         >
           SAMVAD
         </Typography>
