@@ -19,3 +19,19 @@ Samvad is cross-chain. While we treat Ethereum as our base chain, you can use an
 ## Which token
 
 On testnet, we use Chainlink's BnM token. On mainnet, we will use our own token, which will be distributed through an airdrop. The token will be used to participate in the forum and to vote on proposals to change the incentive structure and tokenomics. This makes Samvad a DAO.
+
+# Sponsor Tracks
+## Waku
+To incentivise people maximize their engagement, we show a highly unique and powerful metric to them: the number of people who are viewing the particular post or have viewed it in a particular time frame, either live or the past few minutes. We do this by sending a non-ephemeral ping every time a post is viewed. We then fetch it using a filter. This is highly privacy preserving, and something we have never seen in any other web app. We also tried to ping devices whenever a new reply is created so they can auto-reload, but currently facing some issues there.
+## Chainlink
+We use CCIP to interact with our contract on the primary chain (sepolia) from other chains (currently, avalanche fuji). We transfer both tokens (CCIP BnM) and data (post, reply, etc). We also have a double CCIP call, where you request to withdraw your tokens on sepolia from fuji. Your request first goes from fuji to sepolia through CCIP, and then it triggers another CCIP send internally, from sepolia to fuji (both contracts are funded with LINK).
+## Metamask/Infura
+We fetch real time gas prices from Infura and show them to the user when they want to do a transaction. We multiply the gas prices with the number of instructions we have per tx to show a reliable estimation.
+## Push Protocol
+We use Push Protocol to show real-time notifications to people who's post or reply we are engaging with.
+## The Graph
+Instead of our own indexing platform, we are using The Graph for super fast and reliable fetcher for on-chain data. We are using their 2 graphql apis, one with is parameterized and one is not.
+## Filecoin/IPFS
+In addition to URLs we also support media uploads in the form of images or videos for the posts.
+## Alliance
+We are confident we are building the most innovative incentivised protocol which is most likely to be a startup. We will reduce token sell pressures by improving the token utility two-fold: participation incentives (you earn more by having meaningful conversations) and governance (you can vote on proposals that will benefit you long term). We will do an incentivised testnet launch followed by an airdrop leading up to our mainnet launch.
