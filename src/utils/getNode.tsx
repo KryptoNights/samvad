@@ -32,7 +32,7 @@ const useNode = (): [LightNode | null, Array<any>] => {
       // await new Promise( resolve => setTimeout(resolve, 2000) );
 
       const endTime = new Date();
-      const startTime = new Date(endTime.getTime() - 1000 * 60 * 60 * 1); // 1 hours ago
+      const startTime = new Date(endTime.getTime() - 1000 * 60 * 60 * 24); // 1 hours ago
       const _messages: any = []
       const callback = (wakuMessage: any) => {
         _messages.push(Liveliness.decode(wakuMessage.payload));

@@ -4,7 +4,7 @@ export const sepolia = {
     payCoin: "0xFd57b4ddBf88a4e07fF4e34C487b99af2Fe82a05",
 }
 export const avalanche = {
-    samvadCC: "0x2F407eD9C7699a4a162d49922711aefac5118c4f",
+    samvadCC: "0x80E70004d4613FFb5415Fa59Cf1bdC8fC57dF81a",
     payCoin: "0xD21341536c5cF5EB1bcb58f6723cE26e8D8E90e4",
 }
 

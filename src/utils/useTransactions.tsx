@@ -176,7 +176,7 @@ const useTransactions = () => {
   };
 
   const addPaycoins = async (_amount: number, signer: ethers.Signer) => {
-    const amount = BigInt(_amount) * BigInt("1000000000000000000");
+    const amount = BigInt(_amount*1000000000) * BigInt("1000000000000000000") / BigInt(1000000000)
     setTxnLoading(true);
     const networkjs = await signer.provider?.getNetwork()!
     console.log("chain", networkjs)
@@ -216,7 +216,7 @@ const useTransactions = () => {
   };
 
   const withdrawPaycoins = async (_amount: number, signer: ethers.Signer) => {
-    const amount = BigInt(_amount) * BigInt("1000000000000000000");
+    const amount = BigInt(_amount*1000000000) * BigInt("1000000000000000000") / BigInt(1000000000);
     setTxnLoading(true);
     const networkjs = (await signer.provider?.getNetwork())!
     // err if chain id not in [1, 43113]
@@ -266,7 +266,7 @@ const useTransactions = () => {
     try {
       if (networkjs.chainId == 43113) {
         const samvad = new Contract(avalanche.samvadCC, samvadcc_abi, signer);
-        const tx = await samvad.createPost(mediaUrl, url, text, heading);
+        const tx = await samvad.createPost(url, text, heading);
         await tx.wait();
         console.log(tx);
         setTxnLoading(false);
