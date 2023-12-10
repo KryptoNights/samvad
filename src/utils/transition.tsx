@@ -110,14 +110,14 @@ export async function getReply(id: number): Promise<any> {
   return reply;
 }
 
-function createReplyGraph(id_to_reply: Map<number, any>, parent_to_child: Map<number, number[]>, id: number): any {
+function createReplyGraph(id_to_reply: Map<string, any>, parent_to_child: Map<string, string[]>, id: string): Array<any> {
   const reply = id_to_reply.get(id);
   const replies = [] as any[];
   if (!parent_to_child.has(id)) {
-    return {...reply, replies};
+    return replies;
   }
   for (let i = 0; i < parent_to_child.get(id)!.length; i++) {
-    replies.push(createReplyGraph(id_to_reply, parent_to_child, parent_to_child.get(id)![i]));
+    replies.push({...id_to_reply.get(parent_to_child.get(id)![i]), replies: createReplyGraph(id_to_reply, parent_to_child, parent_to_child.get(id)![i])});
   }
   return replies;
 }
@@ -165,8 +165,8 @@ export async function getPost(id: any) {
   console.log(non_top_level_replies);
   
   // make a parent to child index
-  const parent_to_child = new Map<number, number[]>();
-  const id_to_reply = new Map<number, any>();
+  const parent_to_child = new Map<string, string[]>();
+  const id_to_reply = new Map<string, any>();
   for (let i = 0; i < non_top_level_replies.length; i++) {
     id_to_reply.set(non_top_level_replies[i].id, non_top_level_replies[i]);
     if (parent_to_child.has(non_top_level_replies[i].parent)) {
@@ -177,6 +177,8 @@ export async function getPost(id: any) {
   }
   console.log("> parent to child");
   console.log(parent_to_child);
+  console.log("> id to reply");
+  console.log(id_to_reply);
   // create the graph
   for (let i = 0; i < post.replies.length; i++) {
     const r = createReplyGraph(id_to_reply, parent_to_child, post.replies[i].id)
