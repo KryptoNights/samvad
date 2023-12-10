@@ -100,14 +100,12 @@ const Blog: React.FC<BlogProps> = ({
     const livelinessMap = props.liveliness;
 
     // Accessing keys and values
-    livelinessMap.forEach((value:any, key:any) => {
+    livelinessMap.forEach((value: any, key: any) => {
       console.log(`Key: ${key}, Value: ${value},Id ${id}`);
-      if(Number(key)===Number(id)){
+      if (Number(key) === Number(id)) {
         setLikes(Number(value));
       }
     });
-    
-    
   }, [likes, props?.liveliness]);
 
   return (
@@ -204,15 +202,17 @@ const Blog: React.FC<BlogProps> = ({
               </Button>
             )}
 
-            <Button
-              colorMode="light"
-              kind="link"
-              size="small"
-              style={{ marginRight: "12px" }}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginRight: "12px",
+              }}
               onClick={(event: any) => event}
+              className="text-white text-2xl flex font"
             >
-              👍 {likes}
-            </Button>
+              <span className="bottom-4">👀 </span>{likes}
+            </div>
           </div>
         </div>
       </div>
