@@ -108,6 +108,8 @@ const Blog: React.FC<BlogProps> = ({
     });
   }, [likes, props?.liveliness]);
 
+  console.log('url',mediaUrl)
+
   return (
     <div
       className={styles.container}
@@ -122,7 +124,7 @@ const Blog: React.FC<BlogProps> = ({
       <div className={styles.subContainer}>
         <Avatar
           alt="Avatar"
-          src={url}
+          src={mediaUrl}
           sx={{ height: "150px", width: "auto", borderRadius: "10px" }}
         />
 
@@ -211,7 +213,9 @@ const Blog: React.FC<BlogProps> = ({
               onClick={(event: any) => event}
               className="text-white text-2xl flex font"
             >
-              <span className="bottom-4">👀 </span>{likes}
+              <span className="bottom-4">👀 </span><span style={{marginLeft:'4px'}}>
+              {likes}
+                </span>
             </div>
           </div>
         </div>
