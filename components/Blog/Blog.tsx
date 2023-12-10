@@ -24,7 +24,7 @@ interface BlogProps {
   blogData: any;
   isSlug: boolean;
   props: any;
-  mediaUrl:any;
+  mediaUrl: any;
   address: any;
 }
 const githubUserIds = [
@@ -54,12 +54,10 @@ const Blog: React.FC<BlogProps> = ({
   mediaUrl,
   props,
 }) => {
-
-  
   const router = useRouter();
   console.log(props);
 
-  const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState(Number);
   const [randomImage, setRandomImage] = useState<string>("");
   const [hovered, setHovered] = useState<boolean>(false);
 
@@ -90,19 +88,27 @@ const Blog: React.FC<BlogProps> = ({
     }
     router.push(`/blog/${id}`);
   };
-  const handleLike = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-    console.log("id", id);
-  
-    if (props.liveliness.has(id)) {
-      const likesValue = props.liveliness.get(id);
-      console.log("get", likesValue);
-      setLikes(likesValue);
-    } else {
-      console.log(`ID ${id} not found in the liveliness Map.`);
-    }
-  };
-  
+
+  React.useEffect(() => {
+    // if (props?.liveliness.has(id)) {
+    //   const likesValue = props.liveliness.get(id);
+    //   console.log("get", likesValue);
+    //   setLikes(likesValue);
+    // } else {
+    //   console.log(`ID ${id} not found in the liveliness Map.`);
+    // }
+    const livelinessMap = props.liveliness;
+
+    // Accessing keys and values
+    livelinessMap.forEach((value:any, key:any) => {
+      console.log(`Key: ${key}, Value: ${value},Id ${id}`);
+      if(Number(key)===Number(id)){
+        setLikes(Number(value));
+      }
+    });
+    
+    
+  }, [likes, props?.liveliness]);
 
   return (
     <div
@@ -182,7 +188,7 @@ const Blog: React.FC<BlogProps> = ({
               color={colorPalette.popWhite[500]}
               style={{ fontSize: "16px" }}
             >
-             {text}
+              {text}
             </Typography>
           </div>
 
@@ -203,7 +209,7 @@ const Blog: React.FC<BlogProps> = ({
               kind="link"
               size="small"
               style={{ marginRight: "12px" }}
-              onClick={(event: any) => handleLike(event)}
+              onClick={(event: any) => event}
             >
               👍 {likes}
             </Button>
