@@ -2,33 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 * {
-    box-sizing: border-box;
-    padding: 0px;
-    margin: 0;
-  }
-  
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Yeseva+One&family=Zen+Dots&display=swap");
-  
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Yeseva+One&family=Zen+Dots&display=swap");
-  @font-face {
-    font-family: "Fireside";
-    src: url("/fonts/fireside-fireside-400.otf") format("opentype");
-  }
-  
-  html,
-  body {
-    max-width: 100vw;
-    overflow-x: hidden;
-    font-family: 'Exo 2' !important;
-    background: #161616;
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0;
+}
 
-  }
-  a {
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: none;
-    cursor: pointer;
-  }
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Yeseva+One&family=Zen+Dots&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Yeseva+One&family=Zen+Dots&display=swap");
+@font-face {
+  font-family: "Fireside";
+  src: url("/fonts/fireside-fireside-400.otf") format("opentype");
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: "Exo 2" !important;
+  background: #161616;
+}
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.loader {
+  position: absolute;
+  top: calc(50% - 32px);
+  left: calc(50% - 32px);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  perspective: 800px;
+}
+
+.inner {
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.inner.one {
+  left: 0%;
+  top: 0%;
+  animation: rotate-one 1s linear infinite;
+  border-bottom: 3px solid #efeffa;
+}
+
+.inner.two {
+  right: 0%;
+  top: 0%;
+  animation: rotate-two 1s linear infinite;
+  border-right: 3px solid #efeffa;
+}
+
+.inner.three {
+  right: 0%;
+  bottom: 0%;
+  animation: rotate-three 1s linear infinite;
+  border-top: 3px solid #efeffa;
+}
+
+@keyframes rotate-one {
+  0% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+  }
+}
+
+@keyframes rotate-two {
+  0% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+  }
+}
+
+@keyframes rotate-three {
+  0% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+  }
+}

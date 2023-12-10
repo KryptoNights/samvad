@@ -109,7 +109,7 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
     }
   }, [blogData]);
 
-  console.log('blog',blogData)
+  console.log("blog", blogData);
   return (
     <div style={{ width: "100%", paddingLeft: "20px", paddingRight: "20px" }}>
       {loading ? (
@@ -121,12 +121,16 @@ const Layout: React.FC<LayoutProps> = ({ props }) => {
               marginTop: "200px",
             }}
           >
-            <CircularProgress size={40} sx={{ color: "#3B82F6" }} />
+            <div className="loader">
+              <div className="inner one"></div>
+              <div className="inner two"></div>
+              <div className="inner three"></div>
+            </div>
           </div>
         </>
       ) : (
         <>
-        {console.log('blogData',blogData)}
+          {console.log("blogData", blogData)}
           {blogData.map((blog: any) => (
             <Blog
               key={blog.id}

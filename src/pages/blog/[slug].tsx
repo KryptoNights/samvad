@@ -51,7 +51,11 @@ const Slug = (props: any) => {
                 marginTop: "200px",
               }}
             >
-              <CircularProgress size={40} sx={{ color: "#3B82F6" }} />
+              <div className="loader">
+                <div className="inner one"></div>
+                <div className="inner two"></div>
+                <div className="inner three"></div>
+              </div>
             </div>
           ) : (
             <>
