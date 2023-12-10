@@ -162,11 +162,19 @@ export const Header: React.FC<HeaderProps> = ({
         console.log(tx);
         setPayCoinValue(tx);
         console.log(tx);
-        
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
+
     getBalanceinHeader();
-  }, []);
+
+    const intervalId = setInterval(() => {
+      getBalanceinHeader();
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [accountData]);
 
   const router = useRouter();
   function redirectToHome() {
@@ -301,7 +309,7 @@ export const Header: React.FC<HeaderProps> = ({
               colorMode="dark"
               kind="elevated"
               size="big"
-              style={{ marginTop: "32px",marginLeft:'12px' }}
+              style={{ marginTop: "32px", marginLeft: "12px" }}
               onClick={handlewithDrawCoinModalSubmit}
             >
               {txnLoading ? (
@@ -310,7 +318,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
                 </div>
               ) : (
-                "WithDrwarl Amount"
+                "Withdraw Amount"
               )}
             </Button>
           </Box>
