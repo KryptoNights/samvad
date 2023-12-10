@@ -18,6 +18,51 @@ export async function testProvider(
   Promise.resolve();
 }
 
+import { GraphQLClient } from "graphql-request";
+
+const postsSchema = `query ExampleQuery {
+  postCreateds {
+    Samvad_id
+    account
+    mediaUrl
+    url
+    text
+    heading
+    blockTimestamp
+  }
+}`
+
+const postSchema = `query ExampleQuery($where: PostCreated_filter, $replyCreatedsWhere2: ReplyCreated_filter) {
+  postCreateds(where: $where) {
+    Samvad_id
+    account
+    mediaUrl
+    url
+    text
+    heading
+    blockTimestamp
+  }
+  replyCreateds(where: $replyCreatedsWhere2) {
+    account
+    Samvad_id
+    text
+    post
+    parent
+    top_level
+    blockTimestamp
+  }
+}`
+// {
+//   "where": {
+//     "Samvad_id": 1
+//   },
+//   "replyCreatedsWhere2": {
+//     "post": 1
+//   }
+// }
+
+const gqlClient = new GraphQLClient("https://api.thegraph.com/subgraphs/name/debjit-bw/samvad-testnet");
+
 const sepoliaProvider = new ethers.providers.JsonRpcProvider("https://1rpc.io/sepolia");
 // const sepoliaProvider = new ethers.JsonRpcProvider("https://rpc.sepolia.org");
 // provider: ethers.Provider | ethers.Signer
@@ -65,6 +110,18 @@ export async function getReply(id: number): Promise<any> {
   return reply;
 }
 
+function createReplyGraph(id_to_reply: Map<number, any>, parent_to_child: Map<number, number[]>, id: number): any {
+  const reply = id_to_reply.get(id);
+  const replies = [] as any[];
+  if (!parent_to_child.has(id)) {
+    return {...reply, replies};
+  }
+  for (let i = 0; i < parent_to_child.get(id)!.length; i++) {
+    replies.push(createReplyGraph(id_to_reply, parent_to_child, parent_to_child.get(id)![i]));
+  }
+  return replies;
+}
+
 export async function getPost(id: any) {
   //   console.log("id", id);
   //   console.log("NETWORK");
@@ -76,28 +133,72 @@ export async function getPost(id: any) {
   // for (let i = 0; i < _post.length; i++) {
   //     console.log(_post[i]);
   // }
-  const post = {
-    address: _post[0].toString(),
-    id: _post[1].toString(),
-    url: _post[2].toString(),
-    text: _post[3].toString(),
-    heading: _post[4].toString(),
+  console.log("GQLLLLL getting post number ", id);
+
+  const _postandreplies: any = await gqlClient.request(postSchema, {
+    where: {
+      Samvad_id: id
+    },
+    replyCreatedsWhere2: {
+      post: id
+    }
+  });
+  console.log(_postandreplies);
+
+  let post = {
+    ..._postandreplies.postCreateds[0],
+    id: _postandreplies.postCreateds[0].Samvad_id,
+    address: _postandreplies.postCreateds[0].account,
     replies: [] as any[],
   };
-  for (let i = 0; i < _post[5].length; i++) {
-    // console.log(_post[5][i].toString());
-    post.replies.push(await getReply(parseInt(_post[5][i])));
+  console.log("> post");
+  console.log(post);
+  let non_top_level_replies = [] as any[];
+  for (let i = 0; i < _postandreplies.replyCreateds.length; i++) {
+    if (_postandreplies.replyCreateds[i].top_level) {
+      post.replies.push({..._postandreplies.replyCreateds[i], id: _postandreplies.replyCreateds[i].Samvad_id, address: _postandreplies.replyCreateds[i].account});
+    } else {
+      non_top_level_replies.push({..._postandreplies.replyCreateds[i], id: _postandreplies.replyCreateds[i].Samvad_id, address: _postandreplies.replyCreateds[i].account, replies: [] as any[]});
+    }
   }
+  console.log("> non top level replies");
+  console.log(non_top_level_replies);
+  
+  // make a parent to child index
+  const parent_to_child = new Map<number, number[]>();
+  const id_to_reply = new Map<number, any>();
+  for (let i = 0; i < non_top_level_replies.length; i++) {
+    id_to_reply.set(non_top_level_replies[i].id, non_top_level_replies[i]);
+    if (parent_to_child.has(non_top_level_replies[i].parent)) {
+      parent_to_child.set(non_top_level_replies[i].parent, [...parent_to_child.get(non_top_level_replies[i].parent)!, non_top_level_replies[i].id]);
+    } else {
+      parent_to_child.set(non_top_level_replies[i].parent, [non_top_level_replies[i].id]);
+    }
+  }
+  console.log("> parent to child");
+  console.log(parent_to_child);
+  // create the graph
+  for (let i = 0; i < post.replies.length; i++) {
+    const r = createReplyGraph(id_to_reply, parent_to_child, post.replies[i].id)
+    console.log(">> R", r)
+    post.replies[i] = {...post.replies[i], replies: r};
+  }
+  console.log(">> post");
+  console.log(post);
   return post;
 }
 
 export async function getAllPosts() {
-  const samvad = new Contract(sepolia.samvad, samvad_abi, sepoliaProvider);
-  const postCount = await samvad.getPostCount();
+  console.log("GQLLLLL getting all posts");
+  const _posts: any = await gqlClient.request(postsSchema);
   // console.log(postCount);
   const posts = [] as any[];
-  for (let i = 1; i <= postCount; i++) {
-    posts.push(await getPost(i));
+  for (let i = 0; i < _posts.postCreateds.length; i++) {
+    posts.push({
+      ..._posts.postCreateds[i],
+      id: _posts.postCreateds[i].Samvad_id,
+      address: _posts.postCreateds[i].account,
+    })
   }
   return posts;
 }

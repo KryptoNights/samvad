@@ -24,6 +24,7 @@ interface BlogProps {
   blogData: any;
   isSlug: boolean;
   props: any;
+  mediaUrl:any;
   address: any;
 }
 const githubUserIds = [
@@ -50,8 +51,11 @@ const Blog: React.FC<BlogProps> = ({
   blogData,
   isSlug,
   address,
+  mediaUrl,
   props,
 }) => {
+
+  
   const router = useRouter();
   console.log(props);
 
@@ -59,12 +63,12 @@ const Blog: React.FC<BlogProps> = ({
   const [randomImage, setRandomImage] = useState<string>("");
   const [hovered, setHovered] = useState<boolean>(false);
 
-  useEffect(() => {
-    const randomUserId =
-      githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
-    const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
-    setRandomImage(avatarUrl);
-  }, []);
+  // useEffect(() => {
+  //   const randomUserId =
+  //     githubUserIds[Math.floor(Math.random() * githubUserIds.length)];
+  //   const avatarUrl = `https://avatars.githubusercontent.com/u/${randomUserId}`;
+  //   setRandomImage(avatarUrl);
+  // }, []);
 
   const handleClick = async (id: any) => {
     try {
@@ -114,7 +118,7 @@ const Blog: React.FC<BlogProps> = ({
       <div className={styles.subContainer}>
         <Avatar
           alt="Avatar"
-          src={randomImage}
+          src={url}
           sx={{ height: "150px", width: "auto", borderRadius: "10px" }}
         />
 
@@ -178,14 +182,7 @@ const Blog: React.FC<BlogProps> = ({
               color={colorPalette.popWhite[500]}
               style={{ fontSize: "16px" }}
             >
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Commodi
-              officiis magnam veniam optio voluptatibus animi quos enim
-              similique odit deserunt! Lorem ipsum dolor sit, amet consectetur
-              adipisicing elit. Commodi officiis magnam veniam optio
-              voluptatibus animi quos enim similique odit deserunt! Lorem ipsum
-              dolor sit, amet consectetur adipisicing elit. Commodi officiis
-              magnam veniam optio voluptatibus animi quos enim similique odit
-              deserunt!
+             {text}
             </Typography>
           </div>
 

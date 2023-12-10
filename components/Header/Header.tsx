@@ -191,22 +191,10 @@ export const Header: React.FC<HeaderProps> = ({
             size="big"
             style={{ marginRight: "12px" }}
             onClick={() => {
-              handlewithDrawCoinOpenModal();
-              // getBalanceinHeader();
-            }}
-          >
-            Withdraw Coin
-          </Button>
-          <Button
-            colorMode="light"
-            kind="elevated"
-            size="big"
-            style={{ marginRight: "12px" }}
-            onClick={() => {
               handlePayCoinOpenModal();
             }}
           >
-            Add Coin : {Number(paycoinValue / 1e18).toFixed(2)}
+            Funds : {Number(paycoinValue / 1e18).toFixed(2)}
           </Button>
           <Button
             colorMode="light"
@@ -245,80 +233,6 @@ export const Header: React.FC<HeaderProps> = ({
             </>
           )}
         </div>
-        <Modal
-          open={withdrawCoinOpenModal}
-          onClose={handlewithDrawCoinCloseModal}
-        >
-          <Box
-            sx={{
-              width: "600px",
-              p: 4,
-              mx: "auto",
-              my: "10%",
-              backgroundColor: "#EFEFEF",
-              borderRadius: "1px solid #8A8A8A",
-              outline: "none",
-              position: "relative",
-            }}
-          >
-            <Typography
-              {...FontVariant.HeadingSemiBold22}
-              color={colorPalette.popBlack[500]}
-              style={{ fontSize: "18px" }}
-            >
-              Amount
-            </Typography>
-            <InputField
-              autoFocus
-              colorConfig={{
-                labelColor: "#0d0d0d",
-                textColor: "#000000",
-              }}
-              colorMode="light"
-              id="text_field"
-              value={amount}
-              inputMode="text"
-              maxLength={30}
-              onChange={(e: any) => {
-                const onlyNumbers = e.target.value.replace(/[^0-9]^[.]/g, "");
-                setAmount(onlyNumbers);
-                console.log(onlyNumbers);
-              }}
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-              placeholder="enter amount to Withdraw"
-              type="number"
-              textStyle={styles.label}
-              style={{
-                marginTop: "12px",
-                marginBottom: "34px",
-                paddingBottom: "6px",
-                borderBottom: "2px solid #8A8A8A",
-              }}
-            />
-            <CancelIcon
-              onClick={handlewithDrawCoinCloseModal}
-              className="absolute top-2 right-2 cursor-pointer"
-            />
-
-            <Button
-              colorMode="dark"
-              kind="elevated"
-              size="big"
-              style={{ marginTop: "32px" }}
-              onClick={handlewithDrawCoinModalSubmit}
-            >
-              {txnLoading ? (
-                <div className={styles.flex}>
-                  Transaction in Progress{" "}
-                  <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
-                </div>
-              ) : (
-                "Submit"
-              )}
-            </Button>
-          </Box>
-        </Modal>
-
         <Modal open={payCoinOpenModal} onClose={handlePayCoinCloseModal}>
           <Box
             sx={{
@@ -380,7 +294,23 @@ export const Header: React.FC<HeaderProps> = ({
                   <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
                 </div>
               ) : (
-                "Submit"
+                "Deposit Amount"
+              )}
+            </Button>
+            <Button
+              colorMode="dark"
+              kind="elevated"
+              size="big"
+              style={{ marginTop: "32px",marginLeft:'12px' }}
+              onClick={handlewithDrawCoinModalSubmit}
+            >
+              {txnLoading ? (
+                <div className={styles.flex}>
+                  Transaction in Progress{" "}
+                  <CircularProgress size={20} sx={{ color: "#FBFBFB" }} />
+                </div>
+              ) : (
+                "WithDrwarl Amount"
               )}
             </Button>
           </Box>
